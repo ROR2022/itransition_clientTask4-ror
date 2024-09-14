@@ -46,12 +46,18 @@ const Register = () => {
       const { confirmPassword, ...data } = values;
       try {
         const response = await registerUser(data);
-        console.log('Response:', response);
+        console.log('Response Register:', response);
         const { verification } = response;
         if (verification) {
           console.log('Verification code:', verification);
           setVerificationId(verification);
           setOpenModal(true);
+        }
+        if(response.error){
+          setErrorMessage(response.error.message);
+          setInterval(() => {
+            setErrorMessage(null);
+          }, 3000);
         }
       } 
       //eslint-disable-next-line
@@ -102,6 +108,7 @@ const Register = () => {
             id="username"
             name="username"
             label="Name"
+            type='text'
             value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -178,7 +185,7 @@ const Register = () => {
               {formik.errors.avatar}
             </Typography>
           )}
-          {errorMessage && (
+          {errorMessage!==null && (
             <Typography color="error" variant="body2">
               {errorMessage}
             </Typography>
