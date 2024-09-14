@@ -233,6 +233,7 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
       <Paper sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={rows}
+          getRowId={(row) => row.id}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10]}
