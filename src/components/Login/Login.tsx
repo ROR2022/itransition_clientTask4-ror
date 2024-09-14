@@ -63,7 +63,7 @@ const Login = () => {
       try {
         setLoading(true);
         const response = await loginUser(values);
-        console.log('Res login:', response);
+        //console.log('Res login:', response);
         setResponseLogin(response);
         //router.push('/');
         setTimeout(() => {

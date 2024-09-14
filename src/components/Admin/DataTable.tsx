@@ -98,8 +98,8 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
 
   const handleConfirmModal = async () => {
     setOpenModal(false);
-    console.log("Action Confirmed:", action);
-    console.log("SelectionModel:", selectionModel);
+    //console.log("Action Confirmed:", action);
+    //console.log("SelectionModel:", selectionModel);
     try {
       if (action === "block") {
         const tempUsers = selectionModel.map((user: string) => {
@@ -108,8 +108,8 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
             active: false,
           };
         });
-        const result = await updateActiveUsers(access_token, tempUsers);
-        console.log("Result block:", result);
+        await updateActiveUsers(access_token, tempUsers);
+        //console.log("Result block:", result);
         handleReload();
       } else if (action === "unblock") {
         const tempUsers = selectionModel.map((user: string) => {
@@ -118,12 +118,12 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
             active: true,
           };
         });
-        const result = await updateActiveUsers(access_token, tempUsers);
-        console.log("Result unblock:", result);
+        await updateActiveUsers(access_token, tempUsers);
+        //console.log("Result unblock:", result);
         handleReload();
       } else if (action === "delete") {
-        const result = await deleteUsers(access_token, selectionModel);
-        console.log("Result delete:", result);
+        await deleteUsers(access_token, selectionModel);
+        //console.log("Result delete:", result);
         handleReload();
       }
     } catch (error) {
@@ -142,14 +142,17 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
         active: user.active,
       };
     });
-    console.log("DataUsers parseDataUsers:", data);
+    //console.log("DataUsers parseDataUsers:", data);
     setRows(data);
   };
 
-  //eslint-disable-next-line
-  const handleSelection = (rowSelectionModel: GridRowSelectionModel, details: GridCallbackDetails<any>) => {
+  
+  const handleSelection = (
+    rowSelectionModel: GridRowSelectionModel, 
+    //eslint-disable-next-line
+    details: GridCallbackDetails<any>) => {
     //console.log("NewSelection:", newSelection);
-    console.log("Details:", details);
+    //console.log("Details:", details);
     const newSelection = rowSelectionModel.map((row) => {
       return row.toString();
     });
