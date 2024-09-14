@@ -54,6 +54,7 @@ const Register = () => {
         }
       } catch (error) {
         console.error('Error register:', error);
+        alert(String(error));
       }
     },
   });
