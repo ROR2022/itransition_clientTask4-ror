@@ -20,6 +20,7 @@ import { UserFromDB } from '../Admin/Admin';
 interface ErrorResponseLogin{
     error?: {message?:string, error?:string};
     message?: string;
+    email?: string;
 }
 
 const Login = () => {

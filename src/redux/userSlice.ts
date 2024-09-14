@@ -37,7 +37,7 @@ export const userSlice = createSlice({
             state.email = action.payload.email;
             state.active = action.payload.active;
             state.access_token = action.payload.access_token;
-            state.role = action.payload.role;
+            
         },
         logout: (state) => {
             state.username = '';
@@ -45,7 +45,7 @@ export const userSlice = createSlice({
             state.email = '';
             state.active = false;
             state.access_token = '';
-            state.role = 'guest';
+            
         },
     },
 });
