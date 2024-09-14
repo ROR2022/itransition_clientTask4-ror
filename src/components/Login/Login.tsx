@@ -18,7 +18,7 @@ import Cookies from 'js-cookie';
 import { UserFromDB } from '../Admin/Admin';
 
 interface ErrorResponseLogin{
-    error?: boolean;
+    error?: boolean | {message?:string, error?:string};
     message?: string;
 }
 
