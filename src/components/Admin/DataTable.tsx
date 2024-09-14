@@ -134,7 +134,7 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
   const parseDataUsers = () => {
     const data = dataUsers.map((user: UserFromDB) => {
       return {
-        id: user._id,
+        id: user.id,
         name: user.username,
         email: user.email,
         lastLogin: user.lastLogin,
@@ -142,6 +142,7 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
         active: user.active,
       };
     });
+    console.log("DataUsers parseDataUsers:", data);
     setRows(data);
   };
 

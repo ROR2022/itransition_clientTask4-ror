@@ -16,6 +16,7 @@ import { Alert, AlertTitle } from '@mui/material';
 
 export interface UserFromDB {
   _id?: string;
+  id?: string;
   username?: string;
   email: string;
   active: boolean;
