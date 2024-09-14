@@ -5,7 +5,7 @@ import { Button, IconButton } from "@mui/material";
 import BlockIcon from "@mui/icons-material/Block";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ReplayIcon from '@material-ui/icons/Replay';
+import ReplayIcon from '@mui/icons-material/Replay';
 import ModalConfirm from "./ModalConfirm";
 import { updateActiveUsers, deleteUsers } from "@/api/apiUser";
 import { useSelector } from "react-redux";
