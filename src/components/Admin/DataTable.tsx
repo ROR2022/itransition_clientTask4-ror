@@ -5,6 +5,7 @@ import { Button, IconButton } from "@mui/material";
 import BlockIcon from "@mui/icons-material/Block";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ReplayIcon from '@material-ui/icons/Replay';
 import ModalConfirm from "./ModalConfirm";
 import { updateActiveUsers, deleteUsers } from "@/api/apiUser";
 import { useSelector } from "react-redux";
@@ -232,6 +233,14 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
           aria-label="Delete"
         >
           <DeleteIcon />
+        </IconButton>
+        <IconButton
+          
+          onClick={handleReload}
+          color="primary"
+          aria-label="Reload"
+        >
+          <ReplayIcon />
         </IconButton>
       </div>
       <Paper sx={{ height: 400, width: "100%" }}>
