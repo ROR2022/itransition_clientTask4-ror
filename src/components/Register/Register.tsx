@@ -14,6 +14,7 @@ const Register = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string|null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [verificationId, setVerificationId] = useState<string|null>(null);
+  const [errorMessage, setErrorMessage] = useState<string|null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -52,9 +53,15 @@ const Register = () => {
           setVerificationId(verification);
           setOpenModal(true);
         }
-      } catch (error) {
+      } 
+      //eslint-disable-next-line
+      catch (error:any) {
         console.error('Error register:', error);
-        alert(String(error));
+        setErrorMessage(error.message);
+        setInterval(() => {
+          setErrorMessage(null);
+        }, 3000);
+        //alert(String(error));
       }
     },
   });
@@ -169,6 +176,11 @@ const Register = () => {
           {formik.touched.avatar && formik.errors.avatar && (
             <Typography color="error" variant="body2">
               {formik.errors.avatar}
+            </Typography>
+          )}
+          {errorMessage && (
+            <Typography color="error" variant="body2">
+              {errorMessage}
             </Typography>
           )}
 
