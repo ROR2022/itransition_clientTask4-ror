@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowSelectionModel, GridCallbackDetails } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
 import BlockIcon from "@mui/icons-material/Block";
@@ -145,8 +145,13 @@ const DataTable: FC<DataTableProps> = ({ dataUsers, handleReload }) => {
     setRows(data);
   };
 
-  const handleSelection = (newSelection: Array<string>) => {
+  //eslint-disable-next-line
+  const handleSelection = (rowSelectionModel: GridRowSelectionModel, details: GridCallbackDetails<any>) => {
     //console.log("NewSelection:", newSelection);
+    console.log("Details:", details);
+    const newSelection = rowSelectionModel.map((row) => {
+      return row.toString();
+    });
     setSelectionModel([...newSelection]);
   };
   const handleBlock = () => {
