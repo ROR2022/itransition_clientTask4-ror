@@ -24,6 +24,7 @@ export interface UserFromDB {
   __v?: number;
   lastLogin?: Date;
   avatar?: string;
+error?:boolean;  
 }
 
 
