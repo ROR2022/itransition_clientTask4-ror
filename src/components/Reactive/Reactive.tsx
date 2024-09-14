@@ -4,13 +4,14 @@ import { createReactiveVerification, reactiveAccount } from "@/api/apiUser";
 import { IconButton, Box, Button, TextField, Typography, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/navigation";
+import { DataResultVerification } from "../Forgot/Forgot";
 
 
 
 const Reactive = () => {
     const [email, setEmail] = useState("");
     const [myCode, setMyCode] = useState("");
-    const [resultCreateVerification, setResultCreateVerification] = useState<any>(null);
+    const [resultCreateVerification, setResultCreateVerification] = useState<DataResultVerification|null>(null);
     const [verificationId, setVerificationId] = useState("");
     const router = useRouter();
     

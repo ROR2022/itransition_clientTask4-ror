@@ -15,9 +15,15 @@ import { LOCALSTORAGE_KEY } from "@/dataEnv/dataEnv";
 import Link from 'next/link';
 import CircularProgress from '@mui/material/CircularProgress';
 import Cookies from 'js-cookie';
+import { UserFromDB } from '../Admin/Admin';
+
+interface ErrorResponseLogin{
+    error?: boolean;
+    message?: string;
+}
 
 const Login = () => {
-    const [responseLogin, setResponseLogin] = useState<any>(null);
+    const [responseLogin, setResponseLogin] = useState<UserFromDB|ErrorResponseLogin|null>(null);
     const user = useSelector((state: { user: DataUser }) => state.user);
     const [loading, setLoading] = useState(false);
     const [storedUser, setStoredUser] = useLocalStorage<DataUser>(
@@ -71,7 +77,7 @@ const Login = () => {
             setLoading(false);
       } catch (error) {
         console.error('Error login:', error);
-        setResponseLogin({ error, message: 'Error login' });
+        setResponseLogin({ error:true, message: 'Error login' });
         setLoading(false);
       }
       

@@ -41,6 +41,7 @@ const Register = () => {
     }),
     onSubmit: async (values) => {
       console.log('Data form:', values);
+      //eslint-disable-next-line
       const { confirmPassword, ...data } = values;
       try {
         const response = await registerUser(data);

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button, Typography, Box } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { DataUser,setUser, initialState } from '@/redux/userSlice';
+import { setUser, initialState } from '@/redux/userSlice';
 import { useLocalStorage } from 'usehooks-ts';
 import { useDispatch } from 'react-redux';
 import { LOCALSTORAGE_KEY } from '@/dataEnv/dataEnv';
@@ -11,12 +11,10 @@ import { LOCALSTORAGE_KEY } from '@/dataEnv/dataEnv';
 const Logout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [storedUser, setStoredUser] = useLocalStorage(LOCALSTORAGE_KEY, null);
+  const [, setStoredUser] = useLocalStorage(LOCALSTORAGE_KEY, null);
 
 
   const handleLogout = () => {
-    
-    
     dispatch(setUser(initialState));
     setStoredUser(null);
     router.push('/login');

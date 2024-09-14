@@ -5,11 +5,17 @@ import { IconButton, Box, Button, TextField, Typography, Alert } from "@mui/mate
 import CloseIcon from "@mui/icons-material/Close";
 import CreateNewPassword from "./CreateNewPassword";
 
+export interface DataResultVerification {
+  success?: boolean;
+  message?: string;
+  verification?: string;
+}
+
 
 const Forgot = () => {
   const [email, setEmail] = useState("");
   const [myCode, setMyCode] = useState("");
-  const [resultCreateVerification, setResultCreateVerification] = useState<any>(null);
+  const [resultCreateVerification, setResultCreateVerification] = useState<DataResultVerification|null>(null);
   const [verificationId, setVerificationId] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
   const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;

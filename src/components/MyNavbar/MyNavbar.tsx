@@ -29,7 +29,7 @@ import {
   mainLogoUser,
 } from "@/dataEnv/dataEnv";
 import { useLocalStorage } from "usehooks-ts";
-//import { title } from 'process';
+import { RootState } from "@/redux/store";
 
 const basicPages = [
   { title: "About", url: "/about" },
@@ -44,9 +44,9 @@ const MyNavbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [pages, setPages] = useState(basicPages);
-  const user = useSelector((state: any) => state.user);
+  const user:DataUser = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  const [storedUser, setStoredUser] = useLocalStorage<DataUser>(
+  const [storedUser] = useLocalStorage<DataUser>(
     LOCALSTORAGE_KEY,
     user
   );

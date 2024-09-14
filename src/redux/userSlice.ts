@@ -3,14 +3,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface DataUser {
-    username: string;
-    avatar: string;
+    id?: string;
+    username?: string;
+    avatar?: string;
     email: string;
     active: boolean;
-    access_token: string;
+    access_token?: string;
+    lastLogin?: Date;
+    createdAt?: Date;
 }
 
 export const initialState: DataUser = {
+    id: '',
     username: '',
     avatar: '',
     email: '',

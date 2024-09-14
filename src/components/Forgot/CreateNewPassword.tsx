@@ -3,9 +3,14 @@ import { updatedPassword } from "@/api/apiUser";
 import { useRouter } from "next/navigation";
 import { Box, Button, TextField, Typography, Alert, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { DataResultVerification } from "./Forgot";
 
 interface CreateNewPasswordProps {
-  dataRecovery: any;
+  dataRecovery: { 
+    email: string,
+     myCode: string, 
+     verificationId: string 
+    };
 }
 
 const CreateNewPassword: FC<CreateNewPasswordProps> = ({ dataRecovery }) => {
@@ -14,7 +19,7 @@ const CreateNewPassword: FC<CreateNewPasswordProps> = ({ dataRecovery }) => {
     confirmPassword: "",
     isValidPassword: false,
   });
-  const [resultCreateVerification, setResultCreateVerification] = useState<any>(null);
+  const [resultCreateVerification, setResultCreateVerification] = useState<DataResultVerification|null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,7 +29,7 @@ const CreateNewPassword: FC<CreateNewPasswordProps> = ({ dataRecovery }) => {
     }
   }, [dataNewPassword.password]);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const tempDataRecovery = {
       ...dataRecovery,
