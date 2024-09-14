@@ -13,13 +13,13 @@ const Videos = () => {
     >
         <h2
             style={{
-                marginBottom: '20px',
+                marginBottom: '0px',
             }}
         >Video 1</h2>
         <video src="/video1Task4.mp4" width={1000} height={800} controls></video>
         <h2
             style={{
-                marginBottom: '20px',
+                marginTop: '20px',
             }}
         >Video 2</h2>
         <video src="/video2Task4.mp4" width={1000} height={800} controls></video>
