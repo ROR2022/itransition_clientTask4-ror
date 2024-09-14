@@ -18,7 +18,7 @@ import Cookies from 'js-cookie';
 import { UserFromDB } from '../Admin/Admin';
 
 interface ErrorResponseLogin{
-    error?: boolean | {message?:string, error?:string};
+    error?: {message?:string, error?:string};
     message?: string;
 }
 
@@ -75,9 +75,11 @@ const Login = () => {
             }
             }, 2000);
             setLoading(false);
-      } catch (error) {
-        console.error('Error login:', error);
-        setResponseLogin({ error:true, message: 'Error login' });
+      } 
+      //eslint-disable-next-line
+      catch (errorRes:any) {
+        console.error('Error login:', errorRes);
+        setResponseLogin({ error:{error:errorRes.error,message:errorRes.message}, message: 'Error login' });
         setLoading(false);
       }
       
@@ -139,7 +141,10 @@ const Login = () => {
                 align="center" 
                 color={responseLogin.error ? 'error' : 'success'}
             >
-            {`${responseLogin.error?.error} ${responseLogin.error?.message}` || 'Error login'}
+            {
+              //eslint-disable-next-line
+            `${responseLogin.error?.error} ${responseLogin.error?.message}` || 'Error login'
+            }
             </Typography>
             <Button 
                 onClick={() => setResponseLogin(null)}
