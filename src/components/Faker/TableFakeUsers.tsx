@@ -135,7 +135,6 @@ function createData(
 
 const rowsTMP = [
   createData(
-    1,
     "abc123",
     "John Doe",
     "123 Main St",
@@ -144,7 +143,6 @@ const rowsTMP = [
     "555-1234"
   ),
   createData(
-    2,
     "def456",
     "Jane Doe",
     "456 South St",
@@ -153,7 +151,6 @@ const rowsTMP = [
     "555-4567"
   ),
   createData(
-    3,
     "ghi789",
     "Mike Smith",
     "789 East St",
@@ -162,7 +159,6 @@ const rowsTMP = [
     "555-7890"
   ),
   createData(
-    4,
     "jkl012",
     "Alice Jones",
     "012 North St",
@@ -171,7 +167,6 @@ const rowsTMP = [
     "555-0123"
   ),
   createData(
-    5,
     "mno345",
     "Bob Brown",
     "345 West St",
