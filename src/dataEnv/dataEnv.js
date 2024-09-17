@@ -60,8 +60,8 @@ export const userSettingsLinks = [
 ];
 
 
-export const mainNavbarLongText = 'iTransition Task 4 - ROR';
-export const mainNavbarShortText = 'Task_4-ROR';
+export const mainNavbarLongText = 'iTransition Internship - ROR';
+export const mainNavbarShortText = 'iTransition-ROR';
 
 export const phoneUser = '7777937484';
 export const mainLogoUser = '/rorProfile1.jpg';
