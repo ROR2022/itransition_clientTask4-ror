@@ -1,8 +1,11 @@
 import React from 'react'
+import VideoTask5 from '@/components/Videos/VideoTask5'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+        <VideoTask5 />
+    </div>
   )
 }
 

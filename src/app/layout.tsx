@@ -20,8 +20,8 @@ const geistMono = localFont({
 }); */
 
 export const metadata: Metadata = {
-  title: "iTransition-Task4",
-  description: "iTransition_Task4-ROR",
+  title: "iTransition-ROR",
+  description: "iTransition_Internship-ROR",
 };
 
 export default function RootLayout({
