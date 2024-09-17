@@ -17,9 +17,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import TablePagination from "@mui/material/TablePagination";
 import TableFooter from "@mui/material/TableFooter";
-import { saveAs } from 'file-saver'; 
-import Papa from 'papaparse';
-import { Button } from "@mui/material";
+import { saveAs } from "file-saver";
+import Papa from "papaparse";
+import { Button, Typography } from "@mui/material";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -122,7 +122,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(
-  
   id: string,
   name: string,
   address: string,
@@ -142,14 +141,7 @@ const rowsTMP = [
     "Springfield",
     "555-1234"
   ),
-  createData(
-    "def456",
-    "Jane Doe",
-    "456 South St",
-    "",
-    "Anytown",
-    "555-4567"
-  ),
+  createData("def456", "Jane Doe", "456 South St", "", "Anytown", "555-4567"),
   createData(
     "ghi789",
     "Mike Smith",
@@ -180,20 +172,23 @@ interface TableFakeUsersProps {
   handleGenerateData: () => void;
 }
 
-const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerateData }) => {
-  
+const TableFakeUsers: FC<TableFakeUsersProps> = ({
+  dataFakeUsers,
+  handleGenerateData,
+}) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(dataFakeUsers.length);
   const [rows, setRows] = useState(rowsTMP);
 
   useEffect(() => {
     setRows(dataFakeUsers);
+    setRowsPerPage(dataFakeUsers.length);
   }, [dataFakeUsers]);
 
   const exportToCSV = () => {
     const csv = Papa.unparse(dataFakeUsers);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, 'users.csv');
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "users.csv");
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -205,7 +200,6 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerate
     newPage: number
   ) => {
     setPage(newPage);
-    
   };
 
   const handleChangeRowsPerPage = (
@@ -213,7 +207,6 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerate
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    
   };
 
   return (
@@ -225,14 +218,14 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerate
         overflowX: "auto",
       }}
     >
-        <Button
-            variant="contained"
-            color="success"
-            onClick={exportToCSV}
-            sx={{ marginBottom: "2rem" }}
-            >
-            Export to CSV
-        </Button>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={exportToCSV}
+        sx={{ marginBottom: "2rem" }}
+      >
+        Export to CSV
+      </Button>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -270,14 +263,10 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerate
             </TableRow>
           )}
         </TableBody>
-        <TableFooter
-        >
-          <TableRow
-          
-          >
+        <TableFooter>
+          <TableRow>
             <TablePagination
-            
-              rowsPerPageOptions={[10, 20, 30, { label: "All", value: -1 }]}
+              rowsPerPageOptions={[{ label: "All", value: -1 }, 50, 30, 20, 10]}
               colSpan={3}
               count={dataFakeUsers.length}
               rowsPerPage={rowsPerPage}
@@ -297,11 +286,28 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({ dataFakeUsers, handleGenerate
           </TableRow>
         </TableFooter>
       </Table>
-      <Button 
-      onClick={handleGenerateData}
-      variant="contained" color="secondary" sx={{ mt: 2 }}>
-        Generate Data
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <Button
+          onClick={handleGenerateData}
+          variant="contained"
+          color="secondary"
+          sx={{ mt: 2, display:'none' }}
+        >
+          Generate Data
         </Button>
+        <Typography variant="caption">
+          To autogenerate data, scroll up and down the page.
+        </Typography>
+      </Box>
     </TableContainer>
   );
 };
