@@ -130,3 +130,15 @@ export const deleteUsers = async (token, data) => {
     return { error: tempError };
   }
 }
+
+export const getFakeUsers = async (dataFaker) => {
+  const { seed, region, errorRate, page, limit}= dataFaker;
+  try {
+    const response = await axios.get(`${hostURL}/api/fakerdata?seed=${seed}&region=${region}&errorRate=${errorRate}&page=${page}&limit=${limit}`, dataFaker);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    const tempError = error?.response?.data || error.message;
+    return { error: tempError };
+  }
+}
