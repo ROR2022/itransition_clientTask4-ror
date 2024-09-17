@@ -48,6 +48,7 @@ export default function Faker() {
     limit: 20,
   });
   const [scrollY, setScrollY] = useState(0); 
+  //eslint-disable-next-line
   const [isScrollingDown, setIsScrollingDown] = useState(false); 
 
   const handleScroll = () => {
