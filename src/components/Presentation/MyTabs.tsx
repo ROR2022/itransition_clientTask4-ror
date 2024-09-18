@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -12,11 +12,17 @@ interface MyTabsProps {
 }
 
 const MyTabs:FC<MyTabsProps> = ({dataPresentation,setSlideActive,slideActive}) => {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(dataPresentation.findIndex((slide) => slide.id === slideActive.id));
+    const [slidesTabs, setSlidesTabs] = useState<Array<string>>(dataPresentation.map((slide) => slide.title));
+    console.log('Mytabs slidesTabs:',slidesTabs)
 
+    useEffect(() => {
+        setSlidesTabs(dataPresentation.map((slide) => slide.title));
+    }, [dataPresentation]);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
       console.log('Mytabs NewValue:',newValue)
+      setSlideActive(dataPresentation[newValue]);
     };
   
     return (

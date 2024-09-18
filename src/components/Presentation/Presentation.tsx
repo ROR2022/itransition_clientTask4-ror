@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Slide from "./Slide";
 import { DataSlideType } from "./Slide";
 import MyTabs from "./MyTabs";
