@@ -101,7 +101,7 @@ const Slide:FC<SlideProps> = ({dataSlide, setDataPresentation, dataPresentation}
 
   const addTextBlock = () => {
     const newTextBlock: TextBlock = {
-      id: Date.now(),
+      id: String(Date.now()),
       text: "Nuevo Texto",
       fontSize: 16,
       color: "#000000",
