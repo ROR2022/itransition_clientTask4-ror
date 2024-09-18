@@ -39,6 +39,7 @@ export default function Faker() {
   const [seed, setSeed] = useState<string>("");
   //const [randomSeed, setRandomSeed] = useState<number | null>(null);
   const [dataFakeUsers, setDataFakeUsers] = useState<DataFakeUser[]>([]);
+  const [isChangingParams, setIsChangingParams] = useState<boolean>(false);
   const isMobile = useMediaQuery("(max-width: 900px)");
   const [dataFaker, setDataFaker] = useState<DataFakerType>({
     region: REGIONS[0],
@@ -91,13 +92,25 @@ export default function Faker() {
     }
   }, []);
 
-  useEffect(() => {}, [seed]);
+  useEffect(() => {
+    setIsChangingParams(true);
+  }, [seed]);
 
   useEffect(() => {}, [dataFaker]);
 
-  useEffect(() => {}, [errorRate]);
+  useEffect(() => {
+    setIsChangingParams(true);
+  }, [errorRate]);
 
-  useEffect(() => {}, [region]);
+  useEffect(() => {
+    setIsChangingParams(true);
+  }, [region]);
+
+  useEffect(() => {
+    if(isChangingParams===true){
+      handleGenerateData();
+    }
+  },[isChangingParams]);
 
   const handleRegionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setRegion(event.target.value as string);
@@ -107,7 +120,7 @@ export default function Faker() {
 
   const handleErrorRateChange = (event: Event, newValue: number | number[]) => {
     setErrorRate(newValue as number);
-    setErrorRateText(((newValue as number) * 100).toString());
+    setErrorRateText(((newValue as number)).toString());
     setDataFaker({ ...dataFaker, errorRate: Number(newValue) });
     //handleGenerateData();
   };
@@ -116,10 +129,10 @@ export default function Faker() {
     const value = event.target.value;
     const parsedValue = Number(value);
     if (!isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 1000) {
-      setErrorRate(parsedValue / 100);
+      setErrorRate(parsedValue);
       setErrorRateText(value);
     }
-    setDataFaker({ ...dataFaker, errorRate: parsedValue / 100 });
+    setDataFaker({ ...dataFaker, errorRate: parsedValue });
     //handleGenerateData();
   };
 
@@ -145,11 +158,22 @@ export default function Faker() {
       setDataFaker({ ...dataFaker, seed: generateRandomSeed() });
     }
     try {
-      console.log("dataFaker:", dataFaker);
+      //console.log("dataFaker:", dataFaker);
+      if (isChangingParams===true) {
+        setDataFaker({ ...dataFaker, page: 1, limit: 20 });
+        const tempDataFaker = { ...dataFaker, page: 1, limit: 20 };
+        const response = await getFakeUsers(tempDataFaker);
+        setDataFakeUsers([...response]);
+        setIsChangingParams(false);
+      }else{
       const response = await getFakeUsers(dataFaker);
-      console.log("response fakerData:", response);
       setDataFaker({ ...dataFaker, page: dataFaker.page + 1, limit: 10 });
       setDataFakeUsers([...dataFakeUsers, ...response]);
+      }
+      
+      //console.log("response fakerData:", response);
+
+      
     } catch (e) {
       console.log(e);
     }

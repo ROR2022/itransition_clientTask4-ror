@@ -247,13 +247,13 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({
               <StyledTableCell component="th" scope="row">
                 {dataFakeUsers.findIndex((item) => item.id === row.id) + 1}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.id}</StyledTableCell>
-              <StyledTableCell align="right">{row.name}</StyledTableCell>
-              <StyledTableCell align="right">{row.address}</StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="left">{row.id}</StyledTableCell>
+              <StyledTableCell align="left">{row.name}</StyledTableCell>
+              <StyledTableCell align="left">{row.address}</StyledTableCell>
+              <StyledTableCell align="left">
                 {row.secondaryAddress}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.city}</StyledTableCell>
+              <StyledTableCell align="left">{row.city}</StyledTableCell>
               <StyledTableCell align="right">{row.phone}</StyledTableCell>
             </StyledTableRow>
           ))}
@@ -266,6 +266,7 @@ const TableFakeUsers: FC<TableFakeUsersProps> = ({
         <TableFooter>
           <TableRow>
             <TablePagination
+            sx={{ display: 'none' }}
               rowsPerPageOptions={[{ label: "All", value: -1 }, 50, 30, 20, 10]}
               colSpan={3}
               count={dataFakeUsers.length}
