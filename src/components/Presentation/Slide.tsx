@@ -71,8 +71,16 @@ const Slide: FC<SlideProps> = ({
   useEffect(() => {
     if (!isEditor && !isAuthor) {
       setIsViewer(true);
+    }else{
+      setIsViewer(false);
     }
   }, [isEditor]);
+
+  useEffect(() => {
+  }, [isViewer]);
+
+  useEffect(() => {
+  }, [isAuthor]);
 
   useEffect(() => {
     console.log("myParticipants:", myParticipants);
