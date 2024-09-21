@@ -263,7 +263,7 @@ const Presentation = () => {
               {presentationActive.title}
             </span>
           </Typography>
-          {presentationActive.slides?.length=== 0 && isEditor &&!slideActive &&(
+          {presentationActive.slides?.length=== 0 && (isEditor||isAuthor) &&!slideActive &&(
             <Typography 
             sx={{fontSize: "12px"}}
             color="info" variant="h6" gutterBottom>
