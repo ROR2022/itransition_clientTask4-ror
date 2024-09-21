@@ -1,5 +1,7 @@
 import React from 'react'
-import Presentation from '@/components/Presentation/Presentation'
+import dynamic from 'next/dynamic'
+//import Presentation from '@/components/Presentation/Presentation'
+const Presentation = dynamic(() => import('@/components/Presentation/Presentation'), { ssr: false })
 
 const page = () => {
   return (

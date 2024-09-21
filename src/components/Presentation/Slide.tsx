@@ -1,17 +1,18 @@
-import React, { useState, useRef, FC } from "react";
-import {
-  Typography,
-  Button,
-  TextField,
-  Slider,
-  Box,
-  MenuItem,
-} from "@mui/material";
+"use client";
+import React, { useState, useRef, FC, useEffect } from "react";
+import { Button } from "@mui/material";
 import Draggable from "react-draggable";
-
+import TextControls from "./TextControls";
+import Participants, { ParticipantType } from "./Participants";
+import {
+  createTextblock,
+  addTextblockToSlide,
+  updateTextblock,
+} from "@/api/apiPresentation";
+import { IPresentation } from "./Presentation";
 
 export interface TextBlock {
-  id: string;
+  _id?: string;
   text: string;
   fontSize: number;
   color: string;
@@ -21,88 +22,103 @@ export interface TextBlock {
   textAlign: string;
   x: number;
   y: number;
+  slideId?: string;
 }
 
-const myfonts = [
-  {
-    value: "Arial",
-    label: "Arial",
-  },
-  {
-    value: "Verdana",
-    label: "Verdana",
-  },
-  {
-    value: "Courier New",
-    label: "Courier New",
-  },
-  {
-    value: "Georgia",
-    label: "Georgia",
-  },
-  {
-    value: "Palatino Linotype",
-    label: "Palatino Linotype",
-  },
-  {
-    value: "Times New Roman",
-    label: "Times New Roman",
-  },
-];
-
-const myStyles = [
-  {
-    value: "normal",
-    label: "Normal",
-  },
-  {
-    value: "italic",
-    label: "Italic",
-  },
-  {
-    value: "oblique",
-    label: "Oblique",
-  },
-];
-
-const myAligns = [
-  {
-    value: "left",
-    label: "Left",
-  },
-  {
-    value: "center",
-    label: "Center",
-  },
-  {
-    value: "right",
-    label: "Right",
-  },
-];
-
 export interface DataSlideType {
-  id: string;
+  _id: string;
   title: string;
   description: string;
-  textBlocks: TextBlock[];
+  textblocks: TextBlock[];
 }
 
 interface SlideProps {
   dataSlide: DataSlideType;
-  setDataPresentation: (data:DataSlideType[]) => void;
+  setDataPresentation: (data: DataSlideType[]) => void;
   dataPresentation: DataSlideType[];
+  presentationActive: IPresentation | null;
+  nickNameUser: string;
+  myParticipants: ParticipantType[];
+  setIsUpdatingParticipant: (isUpdating: ParticipantType | null) => void;
+  isEditor: boolean;
+  setReloadDataSlide: (reloadDataSlide: string) => void;
+  isAuthor: boolean;
 }
 
-const Slide:FC<SlideProps> = ({dataSlide, setDataPresentation, dataPresentation}) => {
-  const [textBlocks, setTextBlocks] = useState<TextBlock[]>([...dataSlide.textBlocks]);
+const Slide: FC<SlideProps> = ({
+  dataSlide,
+  setDataPresentation,
+  dataPresentation,
+  presentationActive,
+  nickNameUser,
+  myParticipants,
+  setIsUpdatingParticipant,
+  isEditor,
+  setReloadDataSlide,
+  isAuthor,
+}) => {
+  const [textBlocks, setTextBlocks] = useState<TextBlock[]>([
+    ...(dataSlide.textblocks || []),
+  ]);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
+  const [isViewer, setIsViewer] = useState(
+    !isEditor && !isAuthor ? true : false
+  );
+  //const [isEditor, setIsEditor] = useState(false);
+  //const [isUpdating, setIsUpdating] = useState(false);
   const myContainer = useRef<HTMLDivElement>(null);
-  
 
-  const addTextBlock = () => {
+  useEffect(() => {
+    if (!isEditor && !isAuthor) {
+      setIsViewer(true);
+    }
+  }, [isEditor]);
+
+  useEffect(() => {
+    console.log("myParticipants:", myParticipants);
+  }, [myParticipants]);
+
+  useEffect(() => {
+    setTextBlocks([...(dataSlide.textblocks || [])]);
+    //setSelectedBlock(null);
+  }, [dataSlide]);
+
+  useEffect(() => {
+    console.log("Actualizando dataPresentation:");
+    if (selectedBlock !== null) {
+      const myTextBlock = textBlocks.find(
+        (block) => block._id === selectedBlock
+      );
+      if (myTextBlock) {
+        
+          updateDataSlide(myTextBlock._id||"");
+        
+      }
+    }
+  }, [dataPresentation]);
+
+  const updateDataSlide = async (myBlockId: string) => {
+    //if (isUpdating) return;
+    try {
+      const myBlock:TextBlock | undefined = textBlocks.find((block) => block._id === myBlockId);
+      if (!myBlock) return;
+      const { _id, ...dataBlock } = myBlock;
+      //setIsUpdating(true);
+      const res = await updateTextblock(_id, dataBlock);
+      console.log("res updateTextBlock: ", res);
+      //const res2 = await getDataSlide();
+      //console.log("res2 getDataSlide: ", res2);
+      //setIsUpdating(false);
+      setReloadDataSlide(dataSlide._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //_id: String(Date.now()),
+  const addTextBlock = async () => {
     const newTextBlock: TextBlock = {
-      id: String(Date.now()),
-      text: "Nuevo Texto",
+      text: "New Text",
       fontSize: 16,
       color: "#000000",
       fontFamily: "Arial",
@@ -111,253 +127,146 @@ const Slide:FC<SlideProps> = ({dataSlide, setDataPresentation, dataPresentation}
       textAlign: "center",
       x: 0,
       y: 0,
+      slideId: dataSlide._id,
     };
+    try {
+      const res = await createTextblock(newTextBlock);
+      console.log("res createTextBlock: ", res);
+      if (res._id && dataSlide._id) {
+        newTextBlock._id = res._id;
+        const res2 = await addTextblockToSlide(dataSlide._id, res._id);
+        console.log("res2 addTextblockToSlide: ", res2);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     setTextBlocks([...textBlocks, newTextBlock]);
   };
 
   const updateTextBlock = (id: string, updatedData: Partial<TextBlock>) => {
-    //console.log('updateTextBlock: ', id, updatedData);
-    
-    const widthContainer = myContainer.current?.offsetWidth || 0;
-    const heightContainer = myContainer.current?.offsetHeight || 0;
-    
-    const maxPosibleWidth = widthContainer*.7;
-    if(updatedData.x !== undefined){
-      if(updatedData.x < 0){
-        updatedData.x = 0;
-      }else if(updatedData.x > maxPosibleWidth){
-        updatedData.x = maxPosibleWidth;
-      }
-    }
-    const maxPosibleHeight = heightContainer*.7;
-    if(updatedData.y !== undefined){
-      if(updatedData.y < 0){
-        updatedData.y = 0;
-      }else if(updatedData.y > maxPosibleHeight){
-        updatedData.y = maxPosibleHeight;
-      }
-    }
-  
     setTextBlocks(
       textBlocks.map((block) =>
-        block.id === id ? { ...block, ...updatedData } : block
+        block._id === id ? { ...block, ...updatedData } : block
       )
     );
 
     const newDataSlide = {
       ...dataSlide,
       textBlocks: textBlocks.map((block) =>
-        block.id === id ? { ...block, ...updatedData } : block
-      )
+        block._id === id ? { ...block, ...updatedData } : block
+      ),
     };
     const newDataPresentation = [...dataPresentation];
-    const index = newDataPresentation.findIndex((slide) => slide.id === dataSlide.id);
+    const index = newDataPresentation.findIndex(
+      (slide) => slide._id === dataSlide._id
+    );
     newDataPresentation[index] = newDataSlide;
     setDataPresentation([...newDataPresentation]);
   };
 
+  //rows={Math.min(10, Math.ceil(block.text.split("\n").length + 1))}
+
   return (
-    <div
-      style={{
-        position: "relative",
-        height: "500px",
-        border: "1px solid #ccc",
-      }}
-      ref={myContainer}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          marginTop: "20px",
-        }}
-      >
+    <>
+      {(isEditor || isAuthor) && (
         <Button
           variant="contained"
           color="success"
           onClick={addTextBlock}
-          sx={{ height: "40px", width: "100px" }}
+          sx={{ height: "40px", width: "100px", margin: "10px" }}
         >
           + Text
         </Button>
-        {selectedBlock !== null && (
-          <>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography id="font-size-slider" gutterBottom>
-                Font Size
-              </Typography>
-              <Slider
-                value={
-                  textBlocks.find((block) => block.id === selectedBlock)
-                    ?.fontSize || 16
-                }
-                onChange={(_, newValue) =>
-                  updateTextBlock(selectedBlock, {
-                    fontSize: newValue as number,
-                  })
-                }
-                aria-labelledby="font-size-slider"
-                min={10}
-                max={100}
-                step={1}
-                sx={{ width: "200px" }}
-              />
-            </div>
-            <TextField
-              label="Color"
-              type="color"
-              value={
-                textBlocks.find((block) => block.id === selectedBlock)?.color ||
-                "#000000"
-              }
-              onChange={(e) =>
-                updateTextBlock(selectedBlock, { color: e.target.value })
-              }
-              sx={{ width: "200px" }}
-            />
+      )}
 
-            <TextField
-              label="Background Color"
-              type="color"
-              value={
-                textBlocks.find((block) => block.id === selectedBlock)
-                  ?.backgoundColor || "#ffffff"
-              }
-              onChange={(e) =>
-                updateTextBlock(selectedBlock, {
-                  backgoundColor: e.target.value,
-                })
-              }
-              sx={{ width: "200px" }}
-            />
-
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Font Family"
-              sx={{ width: "100px" }}
-              value={
-                textBlocks.find((block) => block.id === selectedBlock)
-                  ?.fontFamily || "Arial"
-              }
-              onChange={(e) =>
-                updateTextBlock(selectedBlock, { fontFamily: e.target.value })
-              }
-            >
-              {myfonts.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Font Style"
-              sx={{ width: "100px" }}
-              value={
-                textBlocks.find((block) => block.id === selectedBlock)
-                  ?.fontStyle || "normal"
-              }
-              onChange={(e) =>
-                updateTextBlock(selectedBlock, { fontStyle: e.target.value })
-              }
-            >
-              {myStyles.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Text Align"
-              sx={{ width: "100px" }}
-              value={
-                textBlocks.find((block) => block.id === selectedBlock)
-                  ?.textAlign || "center"
-              }
-              onChange={(e) =>
-                updateTextBlock(selectedBlock, { textAlign: e.target.value })
-              }
-            >
-              {myAligns.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-          </>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "10px",
+        }}
+      >
+        {selectedBlock !== null && (isEditor || isAuthor) && (
+          <TextControls
+            selectedBlock={selectedBlock}
+            textBlocks={textBlocks}
+            updateTextBlock={updateTextBlock}
+          />
         )}
-      </Box>
-      {textBlocks.map((block) => (
-        <Draggable
-          key={block.id}
-          position={{ x: block.x, y: block.y }}
-          onStop={(_, data) =>
-            updateTextBlock(block.id, { x: data.x, y: data.y })
-          }
-          bounds="parent"
+
+        <div
+          style={{
+            position: "relative",
+            height: "1000px",
+            width: "100vw",
+            border: "1px solid #ccc",
+            overflow: "auto",
+            marginBottom: "150px",
+          }}
+          ref={myContainer}
         >
-          <div
-            onClick={() => setSelectedBlock(block.id)}
-            style={{
-              position: "absolute",
-              cursor: "move",
-              color: block.color,
-              fontSize: block.fontSize,
-              fontFamily: block.fontFamily,
-              fontStyle: block.fontStyle,
-              backgroundColor: block.backgoundColor,
-            }}
-          >
-            <textarea
-              id={block.id.toString()}
-              value={block.text}
-              onChange={(e) =>
-                updateTextBlock(block.id, { text: e.target.value })
+          {textBlocks.map((block) => (
+            <Draggable
+              key={block._id}
+              position={{ x: block.x, y: block.y }}
+              onStop={(_, data) =>
+                updateTextBlock(block._id || "", { x: data.x, y: data.y })
               }
-              rows={Math.min(10, Math.ceil(block.text.split("\n").length + 1))} 
-              style={{
-                border: selectedBlock === block.id ? "1px solid #000" : "none",
-                paddingTop: "5px",
-                paddingBottom: "5px",
-                paddingLeft: "0px",
-                paddingRight: "0px",
-                textAlign: block.textAlign as "left" | "center" | "right",
-                width: "auto",
-                maxWidth: "80vw",
-                height: "auto",
-                maxHeight: "30vh",
-                resize: "none", 
-                borderRadius: "5px",
-                fontSize: block.fontSize,
-                color: block.color,
-                fontFamily: block.fontFamily,
-                fontStyle: block.fontStyle,
-                backgroundColor: block.backgoundColor,
+              bounds="parent"
+            >
+              <div
+                onClick={() => setSelectedBlock(block._id || null)}
+                style={{
+                  position: "absolute",
+                  cursor: "move",
+                  padding: "5px",
+                  margin: "5px",
+                }}
+              >
+                <textarea
+                  disabled={isViewer}
+                  id={block._id || ""}
+                  value={block.text}
+                  onChange={(e) => {
+                    updateTextBlock(block._id || "", { text: e.target.value });
+                    setSelectedBlock(block._id || null);
+                  }}
+                  style={{
+                    border:
+                      selectedBlock === block._id ? "1px solid #000" : "none",
+                    margin: "5px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                    textAlign: block.textAlign as "left" | "center" | "right",
+                    width: "auto",
+                    maxWidth: "80vw",
+                    height: "auto",
+                    maxHeight: "30vh",
+                    resize: "none",
+                    borderRadius: "5px",
+                    fontSize: block.fontSize,
+                    color: block.color,
+                    fontFamily: block.fontFamily,
+                    fontStyle: block.fontStyle,
+                    backgroundColor: block.backgoundColor,
 
-                overflowY: "auto", 
-              }}
-            />
-
-            
-          </div>
-        </Draggable>
-      ))}
-    </div>
+                    overflowY: "auto",
+                  }}
+                />
+              </div>
+            </Draggable>
+          ))}
+        </div>
+        <Participants
+          myParticipants={myParticipants}
+          presentationActive={presentationActive}
+          nickNameUser={nickNameUser}
+          setIsUpdatingParticipant={setIsUpdatingParticipant}
+        />
+      </div>
+    </>
   );
 };
 
