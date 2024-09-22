@@ -95,10 +95,11 @@ const Presentation = () => {
   useEffect(() => {
     console.log("slideActive:", slideActive);
     //necesitamos checar si el array de textblocks no esta vacio para recuperar los datos de los textblocks
-    if (slideActive && slideActive.textblocks.length > 0 && typeof slideActive.textblocks[0] === 'string') {
+    /* if (slideActive && slideActive.textblocks.length > 0 && typeof slideActive.textblocks[0] === 'string') {
       //console.log("slideActive.textBlocks:", slideActive.textBlocks);
       getDataSlide();
-    }
+    } */
+    if(slideActive!==null) getDataSlide();
   }, [slideActive]);
   useEffect(() => {}, [isEditor]);
   useEffect(() => {}, [nickName]);
