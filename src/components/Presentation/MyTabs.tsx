@@ -3,6 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { DataSlideType } from './Slide';
+import { getSlideById } from '@/api/apiPresentation';
 
 
 interface MyTabsProps {
@@ -23,11 +24,22 @@ const MyTabs:FC<MyTabsProps> = ({dataPresentation,setSlideActive,slideActive}) =
     useEffect(() => {
         setValue(dataPresentation.findIndex((slide:DataSlideType) => slide._id === slideActive._id));
     }, [slideActive]);
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = async (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
       //console.log('Mytabs NewValue:',newValue)
-      setSlideActive(dataPresentation[newValue]);
+      //setSlideActive(dataPresentation[newValue]);
+      await fetchDataSlide(dataPresentation[newValue]._id);
     };
+
+    const fetchDataSlide = async(id:string) => {
+        try {
+            const response = await getSlideById(id);
+            setSlideActive(response);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
   
     return (
       <Box 
