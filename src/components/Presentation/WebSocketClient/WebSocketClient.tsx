@@ -6,6 +6,7 @@ import { hostURL } from "@/dataEnv/dataEnv";
 import { ParticipantType } from "../Participants";
 import { IPresentation } from "../Presentation";
 import { DataSlideType } from "../Slide";
+import { getPresentationById } from "@/api/apiPresentation";
 //import { on } from "events";
 
 let socket: Socket;
@@ -21,6 +22,8 @@ interface WebSocketClientProps {
   setReloadDataSlide: (reloadDataSlide: string|null) => void;
   slideActive: DataSlideType | null;
   onFetchingDataSlide: (data: {presentationActive:string, slideActive:string}) => void;
+  reloadDataPresentation: string | null;
+  setReloadDataPresentation: (reloadDataPresentation: string|null) => void;
 }
 
 const WebSocketClient: FC<WebSocketClientProps> = ({
@@ -33,7 +36,9 @@ const WebSocketClient: FC<WebSocketClientProps> = ({
   reloadDataSlide,
   setReloadDataSlide,
   slideActive,
-  onFetchingDataSlide
+  onFetchingDataSlide,
+  reloadDataPresentation,
+  setReloadDataPresentation,
 }) => {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
@@ -96,13 +101,26 @@ const WebSocketClient: FC<WebSocketClientProps> = ({
       onFetchingDataSlide(objData);
     });
 
+    socket.on("fetchDataPresentation", (presentationId: string) => {
+      if (presentationActive?._id === presentationId) {
+        onFetchingDataPresentation(presentationId);
+      }
+    });
+
     return () => {
-      socket.emit("leave", nickNameUser);
-      socket.disconnect();
+      socket?.emit("leave", nickNameUser);
+      socket?.disconnect();
       console.log("Disconnected from WebSocket server");
       setMyParticipants([]);
     };
   }, []);
+
+  useEffect(() => {
+    if (reloadDataPresentation !== null) {
+      socket?.emit("reloadDataPresentation", presentationActive?._id);
+      setReloadDataPresentation(null);
+    }
+  },[reloadDataPresentation]);
 
   useEffect(() => {
     if (isUpdatingParticipant !== null) {
@@ -128,11 +146,20 @@ const WebSocketClient: FC<WebSocketClientProps> = ({
   }, [slideActive]);
 
   
+  const onFetchingDataPresentation = async (presentationId: string) => {
+    try {
+      const response = await getPresentationById(presentationId);
+      console.log("response getPresentationById:", response);
+      setPresentationActive(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   
 
   const sendMessage = () => {
-    socket.emit("message", message); 
+    socket?.emit("message", message); 
     setMessage(""); 
   };
 

@@ -9,9 +9,10 @@ interface NewSlideProps {
     setSlideActive: (slideActive: DataSlideType) => void;
     dataPresentation: DataSlideType[];
     setDataPresentation: (data: DataSlideType[]) => void;
+    setReloadDataPresentation: (reloadDataPresentation: string|null) => void;
     }
 
-const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPresentation,setDataPresentation}) => {
+const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPresentation,setDataPresentation, setReloadDataPresentation}) => {
     const [titleNewSlide, setTitleNewSlide] = useState('');
     const [descriptionNewSlide, setDescriptionNewSlide] = useState('');
 
@@ -28,6 +29,7 @@ const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPrese
             if(response._id){
             const responsePresentation = await addSlidePresentation(presentationActive._id, response._id);
             console.log('responseAddSlidePresentation:', responsePresentation);
+            setReloadDataPresentation(presentationActive?._id||null);
             }
             setTitleNewSlide('');
             setDescriptionNewSlide('');

@@ -12,6 +12,17 @@ export const getPresentations = async () => {
   }
 };
 
+export const getPresentationById = async (idPresentation) => {
+  try {
+    const response = await axios.get(`${hostURL}/api/presentation/${idPresentation}`);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    const tempError = error?.response?.data || error?.message;
+    return { error: tempError };
+  }
+};
+
 export const createPresentation = async (dataPresentation) => {
   try {
     const response = await axios.post(

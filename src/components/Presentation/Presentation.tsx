@@ -83,6 +83,7 @@ const Presentation = () => {
   const [isUpdatingParticipant, setIsUpdatingParticipant] = useState<ParticipantType|null>(null);
   const [reloadDataSlide, setReloadDataSlide] = useState<string|null>(null);
   const [isFetchingDataSlide, setIsFetchingDataSlide] = useState<{presentationActive:string,slideActive:string}|null>(null);
+  const [reloadDataPresentation, setReloadDataPresentation] = useState<string|null>(null);
 
   useEffect(()=>{
     //setPresentationParticipants([]);
@@ -250,6 +251,8 @@ const Presentation = () => {
           setReloadDataSlide={setReloadDataSlide}
           slideActive={slideActive}
           onFetchingDataSlide={onFetchingDataSlide}
+          reloadDataPresentation={reloadDataPresentation}
+          setReloadDataPresentation={setReloadDataPresentation}
           />
             <Typography variant="h6" gutterBottom>
             Presentation: 
@@ -276,7 +279,7 @@ const Presentation = () => {
               setSlideActive={setSlideActive}
               dataPresentation={dataPresentation}
               setDataPresentation={setDataPresentation}
-              
+              setReloadDataPresentation={setReloadDataPresentation}
             />
           )}
             
