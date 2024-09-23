@@ -232,6 +232,8 @@ const Presentation = () => {
     setPresentationActive(null);
     setSlideActive(null);
     setDataPresentation([]);
+    setIsAuthor(false);
+    setIsEditor(false);
   };
 
   return (
