@@ -10,6 +10,7 @@ import {
   updateTextblock,
 } from "@/api/apiPresentation";
 import { IPresentation } from "./Presentation";
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 export interface TextBlock {
   _id?: string;
@@ -89,7 +90,7 @@ const Slide: FC<SlideProps> = ({
 
   useEffect(() => {
     setTextBlocks([...(dataSlide.textblocks || [])]);
-    setSelectedBlock(null);
+    //setSelectedBlock(null);
   }, [dataSlide]);
 
   useEffect(() => {
@@ -109,6 +110,17 @@ const Slide: FC<SlideProps> = ({
   }, [dataPresentation]);
 
   useEffect(() => {
+    if (selectedBlock !== null) {
+      const myTextBlock = textBlocks.find(
+        (block) => block._id === selectedBlock
+      );
+      if (myTextBlock) {
+        const myElement = document.getElementById(myTextBlock._id || "");
+        if (myElement) {
+          myElement.focus();
+        }
+      }
+    }
   }, [selectedBlock]);
 
   const updateDataSlide = async (myBlockId: string) => {
@@ -182,6 +194,13 @@ const Slide: FC<SlideProps> = ({
 
   return (
     <>
+    <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: "10px",
+    }}
+    >
       {(isEditor || isAuthor) && (
         <Button
           variant="contained"
@@ -189,9 +208,18 @@ const Slide: FC<SlideProps> = ({
           onClick={addTextBlock}
           sx={{ height: "40px", width: "100px", marginTop: "10px", marginBottom: "10px" }}
         >
-          + Text
+          <PostAddIcon/>
         </Button>
       )}
+      {(isEditor || isAuthor) && (
+          <TextControls
+            selectedBlock={selectedBlock}
+            setSelectBlock={setSelectedBlock}
+            textBlocks={textBlocks}
+            updateTextBlock={updateTextBlock}
+          />
+        )}
+        </div>
 
       <div
         style={{
@@ -200,13 +228,7 @@ const Slide: FC<SlideProps> = ({
           gap: "10px",
         }}
       >
-        {selectedBlock !== null && (isEditor || isAuthor) && (
-          <TextControls
-            selectedBlock={selectedBlock}
-            textBlocks={textBlocks}
-            updateTextBlock={updateTextBlock}
-          />
-        )}
+        
 
         <div
           style={{
@@ -241,6 +263,7 @@ const Slide: FC<SlideProps> = ({
                   disabled={isViewer}
                   id={block._id || ""}
                   value={block.text}
+                  onFocus={() => setSelectedBlock(block._id || null)}
                   onChange={(e) => {
                     updateTextBlock(block._id || "", { text: e.target.value });
                     setSelectedBlock(block._id || null);

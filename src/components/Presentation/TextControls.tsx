@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent, useState } from "react";
+import React, { FC, SyntheticEvent, useState, useEffect } from "react";
 import FormatSizeIcon from "@mui/icons-material/FormatSize";
 import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
@@ -6,7 +6,7 @@ import FormatItalicIcon from "@mui/icons-material/FormatItalic";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import FontDownloadIcon from "@mui/icons-material/FontDownload";
 import { TextBlock } from "./Slide";
-import { MenuItem, Slider, TextField } from "@mui/material";
+import { IconButton, MenuItem, Slider, TextField } from "@mui/material";
 
 const myfonts = [
   {
@@ -67,16 +67,28 @@ const myAligns = [
 
 interface TextControlsProps {
   selectedBlock: string | null;
+  setSelectBlock: (id: string | null) => void;
   textBlocks: TextBlock[];
   updateTextBlock: (id: string, updatedData: Partial<TextBlock>) => void;
 }
 
 const TextControls: FC<TextControlsProps> = ({
   selectedBlock,
+  setSelectBlock,
   textBlocks,
   updateTextBlock,
 }) => {
   const [controlActive, setControlActive] = useState<string>("");
+
+  useEffect(() => {
+    const block = textBlocks.find((block) => block._id === selectedBlock);
+    if (!block) {
+      setControlActive("");
+      setSelectBlock(null);
+    }
+      
+    
+  }, [textBlocks]);
 
   const handleControlActive = (e: SyntheticEvent) => {
     const name = e.currentTarget.getAttribute("id");
@@ -91,23 +103,25 @@ const TextControls: FC<TextControlsProps> = ({
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         justifyContent: "initial",
         marginBottom: "10px",
-        marginTop: "20px",
+        
         gap: "10px",
       }}
     >
-      <div
+      <IconButton
         id="size"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FormatSizeIcon />
-      </div>
-      {controlActive === "size" && selectedBlock !== null && (
+      </IconButton>
+      {controlActive === "size" && selectedBlock!==null && (
         <>
           <Slider
+          disabled={selectedBlock === null}
             value={
               textBlocks.find((block) => block._id === selectedBlock)
                 ?.fontSize || 16
@@ -126,13 +140,14 @@ const TextControls: FC<TextControlsProps> = ({
         </>
       )}
 
-      <div
+      <IconButton
         id="color"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FormatColorTextIcon />
-      </div>
+      </IconButton>
       {controlActive === "color" && selectedBlock !== null && (
         <TextField
           label="Color"
@@ -148,13 +163,14 @@ const TextControls: FC<TextControlsProps> = ({
         />
       )}
 
-      <div
+      <IconButton
         id="background"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FormatColorFillIcon />
-      </div>
+      </IconButton>
       {controlActive === "background" && selectedBlock !== null && (
         <TextField
           label="Background Color"
@@ -172,13 +188,14 @@ const TextControls: FC<TextControlsProps> = ({
         />
       )}
 
-      <div
+      <IconButton
         id="font"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FontDownloadIcon />
-      </div>
+      </IconButton>
       {controlActive === "font" && selectedBlock !== null && (
         <TextField
           id="outlined-select-currency"
@@ -201,13 +218,14 @@ const TextControls: FC<TextControlsProps> = ({
         </TextField>
       )}
 
-      <div
+      <IconButton
         id="style"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FormatItalicIcon />
-      </div>
+      </IconButton>
       {controlActive === "style" && selectedBlock !== null && (
         <TextField
           id="outlined-select-currency"
@@ -230,13 +248,14 @@ const TextControls: FC<TextControlsProps> = ({
         </TextField>
       )}
 
-      <div
+      <IconButton
         id="align"
         style={{ cursor: "pointer" }}
         onClick={handleControlActive}
+        disabled={selectedBlock === null}
       >
         <FormatAlignCenterIcon />
-      </div>
+      </IconButton>
       {controlActive === "align" && selectedBlock !== null && (
         <TextField
           id="outlined-select-currency"
