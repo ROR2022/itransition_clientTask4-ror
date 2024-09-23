@@ -120,7 +120,7 @@ const Presentation = () => {
     if(slideActive){
       const isFound = dataPresentation.find((slide) => slide._id === slideActive._id);  
       if(!isFound){
-        setSlideActive(null);
+        setSlideActive(dataPresentation[0] ||null);
       }
     }
     if (dataPresentation.length > 0) {
