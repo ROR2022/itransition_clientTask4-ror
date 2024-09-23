@@ -89,7 +89,7 @@ const Slide: FC<SlideProps> = ({
 
   useEffect(() => {
     setTextBlocks([...(dataSlide.textblocks || [])]);
-    //setSelectedBlock(null);
+    setSelectedBlock(null);
   }, [dataSlide]);
 
   useEffect(() => {
