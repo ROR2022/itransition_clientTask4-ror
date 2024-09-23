@@ -5,6 +5,7 @@ import TablePresentations from "./TablePresentations";
 import { IPresentation } from "./Presentation";
 import CardsPresentations from "./CardsPresentations";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
+import CircularProgress from '@mui/material/CircularProgress';
 //import { DataSlideType } from "./Slide";
 
 
@@ -20,6 +21,7 @@ const Presentations:FC<PresentationsType> = ({nickNameUser, setPresentationActiv
     const [titleNewPresentation, setTitleNewPresentation] = useState('');
     const [descriptionNewPresentation, setDescriptionNewPresentation] = useState('');
     const [viewType, setViewType] = useState<string>('table');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchPresentations();
@@ -27,9 +29,11 @@ const Presentations:FC<PresentationsType> = ({nickNameUser, setPresentationActiv
 
     const fetchPresentations = async () => {
         try {
+            setIsLoading(true);
             const response = await getPresentations();
             console.log('response getPresentations:', response);
             setAllPresentations(response);
+            setIsLoading(false);
         }
         catch (error) {
             console.error(error);
@@ -60,6 +64,21 @@ const Presentations:FC<PresentationsType> = ({nickNameUser, setPresentationActiv
 
   return (
     <div>
+        {isLoading && 
+        <div
+        style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '5px',
+            margin: '10px'
+        }}
+        >
+        <CircularProgress/>
+        </div>
+        }
         <Box
         sx={{
             display: 'flex',

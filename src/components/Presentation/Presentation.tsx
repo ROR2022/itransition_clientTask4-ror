@@ -12,6 +12,7 @@ import { getSlideById } from "@/api/apiPresentation";
 import WebSocketClient from "./WebSocketClient/WebSocketClient";
 import NavbarPresentation from "./NavbarPresentation";
 import { ParticipantType } from "./Participants";
+
 //import { get } from "http";
 //import { error } from "console";
 
@@ -91,6 +92,7 @@ const Presentation = () => {
   const [reloadDataPresentation, setReloadDataPresentation] = useState<
     string | null
   >(null);
+  
 
   useEffect(() => {
     //setPresentationParticipants([]);
