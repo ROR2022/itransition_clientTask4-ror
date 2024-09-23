@@ -101,6 +101,31 @@ export const getSlideById = async (idSlide) => {
   }
 }
 
+export const editSlide = async (idSlide, dataSlide) => {
+  try {
+    const response = await axios.patch(
+      `${hostURL}/api/slide/${idSlide}`,
+      dataSlide
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    const tempError = error?.response?.data || error?.message;
+    return { error: tempError };
+  }
+}
+
+export const deleteSlide = async (idSlide) => {
+  try {
+    const response = await axios.delete(`${hostURL}/api/slide/${idSlide}`);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    const tempError = error?.response?.data || error?.message;
+    return { error: tempError };
+  }
+}
+
 export const createTextblock = async (dataTextblock) => {
   try {
     const response = await axios.post(

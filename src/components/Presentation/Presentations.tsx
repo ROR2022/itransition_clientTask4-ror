@@ -4,6 +4,7 @@ import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, TextFiel
 import TablePresentations from "./TablePresentations";
 import { IPresentation } from "./Presentation";
 import CardsPresentations from "./CardsPresentations";
+import SlideshowIcon from "@mui/icons-material/Slideshow";
 //import { DataSlideType } from "./Slide";
 
 
@@ -45,6 +46,7 @@ const Presentations:FC<PresentationsType> = ({nickNameUser, setPresentationActiv
             }
             const response = await createPresentation(dataPresentation);
             console.log('response createPresentation:', response);
+            setPresentationActive({...response})
             //setAllPresentations(response.data);
             setTitleNewPresentation('');
             setDescriptionNewPresentation('');
@@ -89,7 +91,7 @@ const Presentations:FC<PresentationsType> = ({nickNameUser, setPresentationActiv
         disabled=
         {titleNewPresentation === '' || descriptionNewPresentation === ''}
         >
-            New Presentation
+            + <SlideshowIcon/> 
         </Button>
         </Box>
         <FormControl>

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import { IPresentation } from './Presentation';
 import { DataSlideType } from './Slide';
 import { Box, Button, TextField } from '@mui/material';
@@ -13,9 +13,13 @@ interface NewSlideProps {
     }
 
 const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPresentation,setDataPresentation, setReloadDataPresentation}) => {
-    const [titleNewSlide, setTitleNewSlide] = useState('');
-    const [descriptionNewSlide, setDescriptionNewSlide] = useState('');
+    const [titleNewSlide, setTitleNewSlide] = useState(`Slide${dataPresentation.length+1}`);
+    const [descriptionNewSlide, setDescriptionNewSlide] = useState(`Description Slide${dataPresentation.length+1}`);
 
+    useEffect(() => {
+        setTitleNewSlide(`Slide${dataPresentation.length+1}`);
+        setDescriptionNewSlide(`Description Slide${dataPresentation.length+1}`);
+    }, [dataPresentation]);
     const handleCreateSlide = async() => {
         try {
             const dataSlide = {
@@ -31,8 +35,8 @@ const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPrese
             console.log('responseAddSlidePresentation:', responsePresentation);
             setReloadDataPresentation(presentationActive?._id||null);
             }
-            setTitleNewSlide('');
-            setDescriptionNewSlide('');
+            //setTitleNewSlide(`Slide${dataPresentation.length+1}`);
+            //setDescriptionNewSlide(`Description Slide${dataPresentation.length+1}`);
             setSlideActive(response);
             setDataPresentation([...dataPresentation, response]);
         }
@@ -47,13 +51,14 @@ const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPrese
         sx={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'center',
+            justifyContent: 'initial',
             alignItems: 'center',
             gap: '10px',
             padding: '5px'
         }}
         >
         <TextField
+        sx={{ display:'none'}}
         id="outlined-basic"
         label="Title"
         variant="outlined"
@@ -61,6 +66,7 @@ const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPrese
         onChange={(e) => setTitleNewSlide(e.target.value)}
         />
         <TextField
+        sx={{ display:'none'}}
         id="outlined-basic"
         label="Description"
         variant="outlined"
@@ -69,12 +75,10 @@ const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPrese
         />
         <Button
         variant="contained"
-        color="success"
+        color="info"
         onClick={handleCreateSlide}
-        disabled=
-        {titleNewSlide === '' || descriptionNewSlide === ''}
         >
-            New Slide
+            + Slide
         </Button>
         </Box>
     </div>

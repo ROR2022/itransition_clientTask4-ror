@@ -136,12 +136,12 @@ interface TablePaginationActionsProps {
 
 const TablePresentations:FC<TablePresentationsProps> = ({dataPresentations, setPresentationActive, nickNameUser}) => {
     const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(dataPresentations.length);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setRows] = useState(dataPresentations);
 
   useEffect(() => {
     setRows(dataPresentations);
-    setRowsPerPage(dataPresentations.length);
+    //setRowsPerPage(dataPresentations.length);
   }, [dataPresentations]);
 
   const emptyRows =

@@ -3,15 +3,14 @@ import React, { useState, useEffect } from "react";
 import Slide from "./Slide";
 import { DataSlideType } from "./Slide";
 import MyTabs from "./MyTabs";
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useLocalStorage } from "usehooks-ts";
 import Presentations from "./Presentations";
 import NewSlide from "./NewSlide";
 import { getSlideById } from "@/api/apiPresentation";
 //importar el icono de home de material ui
-import HomeIcon from "@mui/icons-material/Home";
 import WebSocketClient from "./WebSocketClient/WebSocketClient";
-
+import NavbarPresentation from "./NavbarPresentation";
 import { ParticipantType } from "./Participants";
 //import { get } from "http";
 //import { error } from "console";
@@ -61,17 +60,19 @@ export interface IPresentation {
   _id?: string | undefined;
   author?: string | undefined;
   nickname?: string | undefined;
-  users?: {nickname:string, role:string}[] | undefined;
+  users?: { nickname: string; role: string }[] | undefined;
   slides?: [] | undefined;
   title?: string | undefined;
   description?: string | undefined;
 }
 
 const Presentation = () => {
-  const [dataPresentation, setDataPresentation] =
-    useState<Array<DataSlideType>>([]);
-    const [presentationActive, setPresentationActive] = useState<IPresentation|null>(null);
-  const [slideActive, setSlideActive] = useState<DataSlideType|null>(
+  const [dataPresentation, setDataPresentation] = useState<
+    Array<DataSlideType>
+  >([]);
+  const [presentationActive, setPresentationActive] =
+    useState<IPresentation | null>(null);
+  const [slideActive, setSlideActive] = useState<DataSlideType | null>(
     dataPresentation[0]
   );
   const [nickName, setNickName] = useLocalStorage("nickNameUser", "");
@@ -80,84 +81,102 @@ const Presentation = () => {
   const [isAuthor, setIsAuthor] = useState(false);
   //const [presentationParticipants, setPresentationParticipants] = useLocalStorage<ParticipantType[]>('presentationParticipants', []);
   const [myParticipants, setMyParticipants] = useState<ParticipantType[]>([]);
-  const [isUpdatingParticipant, setIsUpdatingParticipant] = useState<ParticipantType|null>(null);
-  const [reloadDataSlide, setReloadDataSlide] = useState<string|null>(null);
-  const [isFetchingDataSlide, setIsFetchingDataSlide] = useState<{presentationActive:string,slideActive:string}|null>(null);
-  const [reloadDataPresentation, setReloadDataPresentation] = useState<string|null>(null);
+  const [isUpdatingParticipant, setIsUpdatingParticipant] =
+    useState<ParticipantType | null>(null);
+  const [reloadDataSlide, setReloadDataSlide] = useState<string | null>(null);
+  const [isFetchingDataSlide, setIsFetchingDataSlide] = useState<{
+    presentationActive: string;
+    slideActive: string;
+  } | null>(null);
+  const [reloadDataPresentation, setReloadDataPresentation] = useState<
+    string | null
+  >(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     //setPresentationParticipants([]);
-    console.log('myParticipants:',myParticipants);
-  },[myParticipants]);
-
-  
+    console.log("myParticipants:", myParticipants);
+  }, [myParticipants]);
 
   useEffect(() => {
     console.log("slideActive:", slideActive);
     //necesitamos checar si el array de textblocks no esta vacio para recuperar los datos de los textblocks
-    if (slideActive && slideActive.textblocks.length > 0 && typeof slideActive.textblocks[0] === 'string') {
+    if (
+      slideActive &&
+      slideActive.textblocks.length > 0 &&
+      typeof slideActive.textblocks[0] === "string"
+    ) {
       //console.log("slideActive.textBlocks:", slideActive.textBlocks);
       getDataSlide();
-    } 
+    }
     //if(slideActive!==null) getDataSlide();
   }, [slideActive]);
+  useEffect(()=>{},[isAuthor]);
   useEffect(() => {}, [isEditor]);
   useEffect(() => {}, [nickName]);
   useEffect(() => {}, [myNickName]);
   useEffect(() => {
     if (dataPresentation.length > 0) {
-      if(!slideActive) setSlideActive(dataPresentation[0]);
+      if (!slideActive) setSlideActive(dataPresentation[0]);
       //console.log("dataPresentation:", dataPresentation);
     }
   }, [dataPresentation]);
   useEffect(() => {
     if (presentationActive) {
+      window.scrollTo(0, 0);
       //setDataPresentation(presentationActive.slides);
       console.log("presentationActive:", presentationActive);
-      if (presentationActive&&presentationActive.slides &&presentationActive.slides.length > 0) {
+      if (
+        presentationActive &&
+        presentationActive.slides &&
+        presentationActive.slides.length > 0
+      ) {
         //setSlideActive(presentationActive.slides[0]);
         setDataPresentation(presentationActive.slides);
       }
-      const userInPresentation = presentationActive?.users?.find(user=>user.nickname===nickName);
-    if(presentationActive.nickname===nickName){
-      setIsAuthor(true);
-      setIsEditor(true);
-    }else if(userInPresentation&&userInPresentation.role==='editor'){
-      setIsEditor(true);
-    }else{
-      setIsEditor(false);
-    }
+      const userInPresentation = presentationActive?.users?.find(
+        (user) => user.nickname === nickName
+      );
+      if (presentationActive.nickname === nickName) {
+        setIsAuthor(true);
+        setIsEditor(true);
+      } else if (userInPresentation && userInPresentation.role === "editor") {
+        setIsEditor(true);
+      } else {
+        setIsEditor(false);
+      }
     }
   }, [presentationActive]);
 
   useEffect(() => {
     //console.log('presentationActive.users:',presentationActive?.users);
-    if(!isAuthor){
+    if (!isAuthor) {
       const tempUsers = presentationActive?.users;
       //comparar si el usuario logeado es editor
       const userLogged = nickName;
-      const userInPresentation = tempUsers?.find(user=>user.nickname===userLogged);
-      if(userInPresentation&&userInPresentation.role==='editor'){
+      const userInPresentation = tempUsers?.find(
+        (user) => user.nickname === userLogged
+      );
+      if (userInPresentation && userInPresentation.role === "editor") {
         setIsEditor(true);
         //getDataSlide();
-      }else{
+      } else {
         setIsEditor(false);
       }
     }
-    
   }, [presentationActive?.users]);
   useEffect(() => {
-    if(isFetchingDataSlide!==null){
+    if (isFetchingDataSlide !== null) {
       onFetchingDataSlide(isFetchingDataSlide);
     }
-  },[isFetchingDataSlide]);
+  }, [isFetchingDataSlide]);
 
   const handleNickName = () => {
     setNickName(myNickName);
+    handleHome();
   };
 
   const getDataSlide = async () => {
-    if(!slideActive) return {error: 'No slide active'};
+    if (!slideActive) return { error: "No slide active" };
     try {
       const res = await getSlideById(slideActive?._id);
       console.log("res getDataSlide:", res);
@@ -166,140 +185,127 @@ const Presentation = () => {
     } catch (error) {
       console.log("error getDataSlide:", error);
     }
-  }
+  };
 
-  const onFetchingDataSlide = (objData:{presentationActive:string, slideActive:string}) => {
-    if(!slideActive){
+  const onFetchingDataSlide = (objData: {
+    presentationActive: string;
+    slideActive: string;
+  }) => {
+    if (!slideActive) {
       setIsFetchingDataSlide(objData);
       return;
-    }else{
+    } else {
       setIsFetchingDataSlide(null);
     }
-    console.log('fetchDataSlide:',objData);
-    console.log('presentationActive:',presentationActive?._id);
-    console.log('slideActive:',slideActive);
-    if(objData.presentationActive === presentationActive?._id&&objData.slideActive === slideActive?._id){
+    console.log("fetchDataSlide:", objData);
+    console.log("presentationActive:", presentationActive?._id);
+    console.log("slideActive:", slideActive);
+    if (
+      objData.presentationActive === presentationActive?._id &&
+      objData.slideActive === slideActive?._id
+    ) {
       //console.log('fetchDataSlide:',objData);
       //setReloadDataSlide('reload');
-      console.log('fetchingDataSlide:....');
+      console.log("fetchingDataSlide:....");
       getDataSlide();
     }
-  }
+  };
+
+  const handleHome = () => {
+    setPresentationActive(null);
+    setSlideActive(null);
+    setDataPresentation([]);
+  };
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: "10px",
-          gap: "10px",
-        }}
-      >
-        <TextField
-          id="outlined-basic"
-          label="Nick Name"
-          variant="outlined"
-          value={myNickName}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            if (newValue.length <= 15) { // Limit nick name to 15 characters
-              setMyNickName(newValue);
-            }
-          }}
-        />
-        <Button variant="contained" color="error" onClick={handleNickName}>
-          Save Nick Name
-        </Button>
-      </Box>
-      {nickName!=='' && (
+      <NavbarPresentation 
+        myNickName={myNickName}
+        setMyNickName={setMyNickName}
+        handleNickName={handleNickName}
+        nickName={nickName}
+        handleHome={handleHome}
+        presentationActive={presentationActive}
+      />
+      
+      {nickName !== "" && (
         <div>
-          
-          <IconButton
-          color="primary"
-          onClick={()=>{
-            setPresentationActive(null);
-            setSlideActive(null);
-            setDataPresentation([]);
-          }}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "50px",
+              backgroundColor: "lightgray",
+              marginTop: "10px",
+              marginBottom: "10px",
+            }}
           >
-          <HomeIcon/>
-          </IconButton>
-          <Typography variant="h6" gutterBottom>
-            Welcome: 
-            <span
-              style={{
-                color: "blue",
-                fontWeight: "bold",
-                marginLeft: "10px",
-              }}
-            >
-              {nickName}
-            </span>
-          </Typography>
-          {presentationActive!==null && (
-            <>
-            <WebSocketClient
-          nickNameUser={nickName}
-          setMyParticipants={setMyParticipants}
-          presentationActive={presentationActive}
-          setPresentationActive={setPresentationActive}
-          isUpdatingParticipant={isUpdatingParticipant}
-          setIsUpdatingParticipant={setIsUpdatingParticipant}
-          reloadDataSlide={reloadDataSlide}
-          setReloadDataSlide={setReloadDataSlide}
-          slideActive={slideActive}
-          onFetchingDataSlide={onFetchingDataSlide}
-          reloadDataPresentation={reloadDataPresentation}
-          setReloadDataPresentation={setReloadDataPresentation}
-          />
-            <Typography variant="h6" gutterBottom>
-            Presentation: 
-            <span
-              style={{
-                color: "blue",
-                fontWeight: "bold",
-                marginLeft: "10px",
-              }}
-            >
-              {presentationActive.title}
-            </span>
-          </Typography>
-          {presentationActive.slides?.length=== 0 && (isEditor||isAuthor) &&!slideActive &&(
-            <Typography 
-            sx={{fontSize: "12px"}}
-            color="info" variant="h6" gutterBottom>
-              Please add a new slide to start the presentation
-            </Typography>
-          )}
-          {isAuthor && (
-            <NewSlide
-              presentationActive={presentationActive}
-              setSlideActive={setSlideActive}
-              dataPresentation={dataPresentation}
-              setDataPresentation={setDataPresentation}
-              setReloadDataPresentation={setReloadDataPresentation}
-            />
-          )}
             
+          </div>
+          {presentationActive !== null && (
+            <>
+              <WebSocketClient
+                nickNameUser={nickName}
+                setMyParticipants={setMyParticipants}
+                presentationActive={presentationActive}
+                setPresentationActive={setPresentationActive}
+                isUpdatingParticipant={isUpdatingParticipant}
+                setIsUpdatingParticipant={setIsUpdatingParticipant}
+                reloadDataSlide={reloadDataSlide}
+                setReloadDataSlide={setReloadDataSlide}
+                slideActive={slideActive}
+                onFetchingDataSlide={onFetchingDataSlide}
+                reloadDataPresentation={reloadDataPresentation}
+                setReloadDataPresentation={setReloadDataPresentation}
+              />
+              
+              {presentationActive.slides?.length === 0 &&
+                (isEditor || isAuthor) &&
+                !slideActive && (
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      textAlign: "center",
+                    }}
+                    color="info"
+                    variant="h6"
+                    gutterBottom
+                  >
+                    Please add a new slide to start the presentation
+                  </Typography>
+                )}
+
+              {isAuthor && (
+                <NewSlide
+                  presentationActive={presentationActive}
+                  setSlideActive={setSlideActive}
+                  dataPresentation={dataPresentation}
+                  setDataPresentation={setDataPresentation}
+                  setReloadDataPresentation={setReloadDataPresentation}
+                />
+              )}
             </>
           )}
-          {presentationActive===null &&(
+
+          {presentationActive === null && (
             <Presentations
               setPresentationActive={setPresentationActive}
               nickNameUser={nickName}
             />
           )}
-          {slideActive&& presentationActive &&(
+          {slideActive && presentationActive && (
             <>
               <MyTabs
                 dataPresentation={dataPresentation}
                 slideActive={slideActive}
                 setSlideActive={setSlideActive}
+                isAuthor={isAuthor}
+                setPresentationActive={setPresentationActive}
+                setReloadDataPresentation={setReloadDataPresentation}
               />
-              {slideActive  &&(
+              {slideActive && (
                 <Slide
                   dataSlide={slideActive}
                   setDataPresentation={setDataPresentation}

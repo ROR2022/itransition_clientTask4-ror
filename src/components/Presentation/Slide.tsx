@@ -30,6 +30,7 @@ export interface DataSlideType {
   title: string;
   description: string;
   textblocks: TextBlock[];
+  presentationId: string;
 }
 
 interface SlideProps {
@@ -181,7 +182,7 @@ const Slide: FC<SlideProps> = ({
           variant="contained"
           color="success"
           onClick={addTextBlock}
-          sx={{ height: "40px", width: "100px", margin: "10px" }}
+          sx={{ height: "40px", width: "100px", marginTop: "10px", marginBottom: "10px" }}
         >
           + Text
         </Button>
