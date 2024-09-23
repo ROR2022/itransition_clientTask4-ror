@@ -49,12 +49,31 @@ const MyTabs: FC<MyTabsProps> = ({
   }, [dataPresentation]);
 
   useEffect(() => {
-    setValue(
-      dataPresentation.findIndex(
-        (slide: DataSlideType) => slide._id === slideActive._id
-      )
-    );
+    const findIndexSlide=dataPresentation.findIndex(
+      (slide: DataSlideType) => slide._id === slideActive._id
+    )
+    if(findIndexSlide!==-1){
+      setValue(findIndexSlide);
+    }else{
+      setValue(0);
+    }
+    
   }, [slideActive]);
+
+  useEffect(() => {
+    const findSlideTab = slidesTabs[value];
+    if(!findSlideTab){
+      setValue(0);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    const findSlideTab = slidesTabs[value];
+    if(!findSlideTab){
+      setValue(0);
+    }
+  },[slidesTabs]);
+
   const handleChange = async (
     event: React.SyntheticEvent,
     newValue: number
@@ -106,7 +125,7 @@ const MyTabs: FC<MyTabsProps> = ({
       setPresentationActive={setPresentationActive} 
         dataModal={dataModal} 
       isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />}
-{isAuthor && (
+{isAuthor&& slideActive && (
               <div
                 style={{
                   display: "flex",

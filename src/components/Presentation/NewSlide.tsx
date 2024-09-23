@@ -13,13 +13,13 @@ interface NewSlideProps {
     }
 
 const NewSlide:FC<NewSlideProps> = ({presentationActive,setSlideActive,dataPresentation,setDataPresentation, setReloadDataPresentation}) => {
-    const [titleNewSlide, setTitleNewSlide] = useState(`Slide${dataPresentation.length+1}`);
-    const [descriptionNewSlide, setDescriptionNewSlide] = useState(`Description Slide${dataPresentation.length+1}`);
+    const [titleNewSlide, setTitleNewSlide] = useState(`Slide${(presentationActive.slides?.length || 0) + 1}`);
+    const [descriptionNewSlide, setDescriptionNewSlide] = useState(`Description Slide${(presentationActive.slides?.length || 0) + 1}`);
 
     useEffect(() => {
-        setTitleNewSlide(`Slide${dataPresentation.length+1}`);
-        setDescriptionNewSlide(`Description Slide${dataPresentation.length+1}`);
-    }, [dataPresentation]);
+        setTitleNewSlide(`Slide${(presentationActive.slides?.length || 0) + 1}`);
+        setDescriptionNewSlide(`Description Slide${(presentationActive.slides?.length || 0) + 1}`);
+    }, [presentationActive]);
     const handleCreateSlide = async() => {
         try {
             const dataSlide = {

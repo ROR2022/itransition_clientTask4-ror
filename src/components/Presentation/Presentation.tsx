@@ -62,7 +62,7 @@ export interface IPresentation {
   author?: string | undefined;
   nickname?: string | undefined;
   users?: { nickname: string; role: string }[] | undefined;
-  slides?: [] | undefined;
+  slides?: DataSlideType[] | undefined;
   title?: string | undefined;
   description?: string | undefined;
 }
@@ -110,6 +110,12 @@ const Presentation = () => {
       //console.log("slideActive.textBlocks:", slideActive.textBlocks);
       getDataSlide();
     }
+    if(slideActive===null&& presentationActive&& presentationActive.slides){
+      if(presentationActive.slides.length>0){
+        const firstSlide = presentationActive.slides[0];
+        if(firstSlide)setSlideActive(firstSlide || null);
+      }
+    }
     //if(slideActive!==null) getDataSlide();
   }, [slideActive]);
   useEffect(()=>{},[isAuthor]);
@@ -133,6 +139,9 @@ const Presentation = () => {
       window.scrollTo(0, 0);
       //setDataPresentation(presentationActive.slides);
       console.log("presentationActive:", presentationActive);
+      if(presentationActive.slides?.length===0){
+        setSlideActive(null);
+      }
       if (
         presentationActive &&
         presentationActive.slides &&
@@ -268,6 +277,19 @@ const Presentation = () => {
                 reloadDataPresentation={reloadDataPresentation}
                 setReloadDataPresentation={setReloadDataPresentation}
               />
+              {presentationActive.slides?.length === 0 && !isAuthor &&(
+                <Typography
+                  sx={{
+                    fontSize: "12px",
+                    textAlign: "center",
+                  }}
+                  color="info"
+                  variant="h6"
+                  gutterBottom
+                >
+                  The author has not added slides yet
+                </Typography>
+              )}
               
               {presentationActive.slides?.length === 0 &&
                 (isEditor || isAuthor) &&
