@@ -40,10 +40,25 @@ const ModalTabs:FC<ModalTabsProps>=({
 })=>{
   const {action,slide} = dataModal || {};
   const [slideTitle, setSlideTitle] = useState(slide?.title);
+  const [presentationId, setPresentationId] = useState('');
   const [dataRes, setDataRes] = useState({
     message:'',
     error:false
   });
+
+  useEffect(() => {
+    console.log('ModalTabs slide:',slide);
+    if(typeof slide?.presentationId === 'string'){
+      setPresentationId(slide?.presentationId);
+      console.log('slide.presentationId:',slide?.presentationId);
+    }else{
+      const tempId = slide?.presentationId._id || '';
+    setPresentationId(tempId);
+    console.log('slide.presentationId:',tempId);
+    }
+    
+  },[]);
+
   const handleClose = () => {
     setIsOpenModal(false);
     setDataRes({
@@ -62,11 +77,11 @@ const ModalTabs:FC<ModalTabsProps>=({
           message:'Slide deleted',
           error:false
         });
-        const getDataPresentationAgain = await getPresentationById(slide?.presentationId);
+        const getDataPresentationAgain = await getPresentationById(presentationId);
         setTimeout(() => {
            if(getDataPresentationAgain){
               setPresentationActive(getDataPresentationAgain);
-              setReloadDataPresentation(slide?.presentationId || null);
+              setReloadDataPresentation(presentationId);
               setSlideActive(null);
            }
             handleClose();
@@ -93,11 +108,11 @@ const ModalTabs:FC<ModalTabsProps>=({
           message:'Slide updated',
           error:false
         });
-        const getDataPresentationAgain = await getPresentationById(slide?.presentationId);
+        const getDataPresentationAgain = await getPresentationById(presentationId);
         setTimeout(() => {
             if(getDataPresentationAgain){
                 setPresentationActive(getDataPresentationAgain);
-                setReloadDataPresentation(slide?.presentationId||null);
+                setReloadDataPresentation(presentationId);
             }
             handleClose();
         }, 1000);

@@ -31,7 +31,7 @@ export interface DataSlideType {
   title: string;
   description: string;
   textblocks: TextBlock[];
-  presentationId: string;
+  presentationId: IPresentation | string;
 }
 
 interface SlideProps {
