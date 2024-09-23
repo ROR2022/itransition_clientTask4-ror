@@ -102,6 +102,8 @@ const Slide: FC<SlideProps> = ({
         
           updateDataSlide(myTextBlock._id||"");
         
+      }else{
+        setSelectedBlock(null);
       }
     }
   }, [dataPresentation]);
