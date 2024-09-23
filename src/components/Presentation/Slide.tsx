@@ -108,6 +108,9 @@ const Slide: FC<SlideProps> = ({
     }
   }, [dataPresentation]);
 
+  useEffect(() => {
+  }, [selectedBlock]);
+
   const updateDataSlide = async (myBlockId: string) => {
     //if (isUpdating) return;
     try {
