@@ -117,6 +117,12 @@ const Presentation = () => {
   useEffect(() => {}, [nickName]);
   useEffect(() => {}, [myNickName]);
   useEffect(() => {
+    if(slideActive){
+      const isFound = dataPresentation.find((slide) => slide._id === slideActive._id);  
+      if(!isFound){
+        setSlideActive(null);
+      }
+    }
     if (dataPresentation.length > 0) {
       if (!slideActive) setSlideActive(dataPresentation[0]);
       //console.log("dataPresentation:", dataPresentation);
