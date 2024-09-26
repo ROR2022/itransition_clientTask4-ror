@@ -9,6 +9,10 @@ export const LOCALSTORAGE_KEY = "userItransitionTask4";
 
 export const dataAvatares = [
   {
+    title: "Avatar 0",
+    url: "/avatar0.png",
+  },
+  {
     title: "Avatar 1",
     url: "/avatar1.png",
   },

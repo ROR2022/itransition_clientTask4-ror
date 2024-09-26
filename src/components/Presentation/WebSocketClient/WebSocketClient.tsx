@@ -45,8 +45,8 @@ const WebSocketClient: FC<WebSocketClientProps> = ({
   //const [dataSlideTmp, setDataSlideTmp] = useState<DataSlideType | null>(null);
 
   useEffect(() => {
-    // Conectando al servidor WebSocket
-    socket = io(`${hostURL}`); // Cambia esta URL según la configuración de tu servidor
+    
+    socket = io(`${hostURL}`); 
 
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
@@ -54,7 +54,7 @@ const WebSocketClient: FC<WebSocketClientProps> = ({
 
     socket.on("message", (data: string) => {
       console.log("Message from server:", data);
-      setResponse(data); // Actualiza la respuesta del servidor
+      setResponse(data); 
     });
 
     const dataJoin = {
