@@ -53,12 +53,13 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
 
   useEffect(() => {
     if (incomingVideoSignal.signal !== null) {
-      answerCall(
+      /* answerCall(
         incomingVideoSignal.signal,
         incomingVideoSignal.sender,
         incomingVideoSignal.reciver
       );
-      setIncomingVideoSignal(initDataVideoCall);
+      setIncomingVideoSignal(initDataVideoCall); */
+      console.log("ModalVideoChat incomingVideoSignal:", incomingVideoSignal);
     }
   }, [incomingVideoSignal]);
 
@@ -99,6 +100,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     peer.on("signal", (data) => {
       // Enviar respuesta al servidor
       setPeerVideoSignal({ signal: data as ISignalData, sender, reciver });
+      setIncomingVideoSignal(initDataVideoCall);
     });
 
     if (signalData)
@@ -117,10 +119,10 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     <div>
       <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
 
-      {isAnsweringVideoCall.signal !== null ? (
+      {incomingVideoSignal.signal !== null ? (
         <>
           <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
-          <Button variant="contained" color="primary" onClick={()=>answerCall(isAnsweringVideoCall.signal, isAnsweringVideoCall.sender,isAnsweringVideoCall.reciver)}>
+          <Button variant="contained" color="primary" onClick={()=>answerCall(incomingVideoSignal.signal, incomingVideoSignal.sender,incomingVideoSignal.reciver)}>
             Answer VideoCall
           </Button>
         </>
