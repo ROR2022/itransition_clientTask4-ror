@@ -49,6 +49,10 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   }, []);
 
   useEffect(() => {
+    console.log("isOtherStream:", isOtherStream);
+  }, [isOtherStream]);
+
+  useEffect(() => {
     if (isAnsweringVideoCall.signal !== null) {
       console.log("ModalVideoChat isAnsweringCall:", isAnsweringVideoCall);
       //setStream(isAnsweringVideoCall.signal);
