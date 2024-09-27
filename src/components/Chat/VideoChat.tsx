@@ -10,6 +10,7 @@ interface IVideoChat {
 
 const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isReciver, setIsReciver] = useState(false);
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const otherVideoRef = useRef<HTMLVideoElement>(null);
   const peerRef = useRef<Peer.Instance | null>(null);
@@ -60,6 +61,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       );
       setIncomingVideoSignal(initDataVideoCall); */
       console.log("ModalVideoChat incomingVideoSignal:", incomingVideoSignal);
+      setIsReciver(true);
     }
   }, [incomingVideoSignal]);
 
@@ -117,9 +119,9 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   };
   return (
     <div>
-      <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
+      
 
-      {incomingVideoSignal.signal !== null ? (
+      {isReciver ? (
         <>
           <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
           <Button variant="contained" color="primary" onClick={()=>answerCall(incomingVideoSignal.signal, incomingVideoSignal.sender,incomingVideoSignal.reciver)}>
@@ -127,9 +129,12 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
           </Button>
         </>
       ) : (
+        <>
+        <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
         <Button variant="contained" color="primary" onClick={startCall}>
           Init VideoCall
         </Button>
+        </>
       )}
     </div>
   );
