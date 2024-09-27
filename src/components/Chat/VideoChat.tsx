@@ -24,6 +24,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     setIsAnsweringVideoCall,
     incomingVideoSignal,
     setIncomingVideoSignal,
+    peerVideoSignal,
     initDataVideoCall,
     setPeerVideoSignal,
   } = useContext(ChatContext);
@@ -54,14 +55,22 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   }, [isOtherStream]);
 
   useEffect(() => {
+    if(peerVideoSignal.signal !== null){
+      console.log('VideoChat peerVideoSignal:',peerVideoSignal);
+      //answerCall(peerVideoSignal.signal,peerVideoSignal.sender,peerVideoSignal.reciver);
+      //setPeerVideoSignal(initDataVideoCall);
+    }
+  },[peerVideoSignal]);
+
+  useEffect(() => {
     if (isAnsweringVideoCall.signal !== null) {
       console.log("ModalVideoChat isAnsweringCall:", isAnsweringVideoCall);
       //setStream(isAnsweringVideoCall.signal);
-        answerCall(
+        /* answerCall(
             isAnsweringVideoCall.signal,
             isAnsweringVideoCall.sender,
             isAnsweringVideoCall.reciver
-        );
+        ); */
       setIsAnsweringVideoCall(initDataVideoCall);
     }
   }, [isAnsweringVideoCall]);

@@ -37,6 +37,12 @@ const ModalVideoChat: FC<ModalVideoChatProps> = ({
   };
 
   return (
+    <div
+    style={{
+        maxWidth: '90vw',
+        overflow: 'auto'
+    }}
+    >
     <Modal
       open={isOpenModal}
       onClose={handleCloseModal}
@@ -57,8 +63,21 @@ const ModalVideoChat: FC<ModalVideoChatProps> = ({
             }}/>
         </IconButton>
         <VideoChat dataParticipantsVideoChat={dataParticipantsVideoChat} />
+        <IconButton
+            sx={{
+                position: 'absolute',
+                top: '0',
+                right: '0',
+            }}
+            onClick={handleCloseModal}
+        >
+            <CancelIcon sx={{
+                color: 'seagreen'
+            }}/>
+        </IconButton>
       </Box>
     </Modal>
+    </div>
   );
 };
 
