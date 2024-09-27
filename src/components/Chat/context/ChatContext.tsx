@@ -4,11 +4,6 @@ import { createContext, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { IConversation, IMessage, IParticipant } from "../MyConversations";
 import { SignalData } from "simple-peer";
-//import { setIn } from 'formik';
-//import { setUser } from '@/redux/userSlice';
-//import { string } from 'yup';
-
-//import { initDataUser } from '../Chat';
 
 export const initDataUser: IParticipant = {
   _id: "",
@@ -40,6 +35,19 @@ const initMessage = {
   },
   updatedAt: new Date(),
 };
+
+export type TimageMessage = {
+  content: string;
+  sender: string;
+  reciver: string;
+};
+
+
+const initImageMessage: TimageMessage = {
+  content: '',
+  sender: '',
+  reciver: '',
+}
 
 export type ISignalData = SignalData;
 
@@ -92,6 +100,11 @@ export const ChatContext = createContext({
   peerVideoSignal: initVideoSignal,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setPeerVideoSignal: (_peerVideoSignal: IVideoCall) => {},
+  imageMessage: initImageMessage,
+  setImageMessage: (_imageMessage: TimageMessage) => {console.log('imageMessage')},
+  imageRecived: initImageMessage,
+  setImageRecived: (_imageRecived: TimageMessage) => {console.log('imageRecived')},
+  initImageMessage,
   initVideoSignal,
   initDataUser,
   initMessage,
@@ -129,6 +142,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [peerVideoSignal, setPeerVideoSignal] =
     useState<IVideoCall>(initVideoSignal);
 
+    const [imageMessage, setImageMessage] = useState<TimageMessage>(initImageMessage);
+    const [imageRecived, setImageRecived] = useState<TimageMessage>(initImageMessage);
+
   useEffect(() => {}, [dataUserChat]);
 
   return (
@@ -154,6 +170,11 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         setIncomingVideoSignal,
         peerVideoSignal,
         setPeerVideoSignal,
+        imageMessage,
+        setImageMessage,
+        imageRecived,
+        setImageRecived,
+        initImageMessage,
         initVideoSignal,
         initDataUser,
         initMessage,

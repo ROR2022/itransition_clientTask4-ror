@@ -129,11 +129,12 @@ const MyConversations = () => {
           (hideConversation) =>
             String(hideConversation) === String(conversation._id)
         );
-        if (!findConversation) {
+        const isAlreadyInConversations = tempConversations.find(repeatedConversation => repeatedConversation._id === conversation._id);
+        if (!findConversation&&!isAlreadyInConversations) {
           tempConversations.push(conversation);
         }
       });
-      //console.log("tempConversations:", tempConversations);
+      console.log("tempConversations:", tempConversations);
       setUserConversations(tempConversations);
     } catch (error) {
       console.log(error);

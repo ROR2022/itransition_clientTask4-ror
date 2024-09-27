@@ -7,7 +7,7 @@ import { dataAvatares } from "@/dataEnv/dataEnv";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { IconButton } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import {  hideConversationInParticipant } from "@/api/apiChat";
+import {  deleteConversation } from "@/api/apiChat";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { HiOutlineStatusOffline } from "react-icons/hi";
 
@@ -55,12 +55,12 @@ const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
   const handleDeleteConversation = async () => {
     console.log("Deleting Conversation:", dataConversation);
     try {
-      //const res = await deleteConversation(dataConversation._id);
-      const dataHide={
+      const res = await deleteConversation(dataConversation._id);
+      /* const dataHide={
         conversationId: dataConversation._id,
         nickname: dataUserChat.nickname
       }
-      const res = await hideConversationInParticipant(dataHide);
+      const res = await hideConversationInParticipant(dataHide); */
       console.log("Conversation Deleted:", res);
       const newConversations = userConversations.filter(
         (conversation) => conversation._id !== dataConversation._id

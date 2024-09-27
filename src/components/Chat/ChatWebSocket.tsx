@@ -24,6 +24,10 @@ const ChatWebSocket = () => {
     peerVideoSignal,
     setPeerVideoSignal,
     initDataVideoCall,
+    imageMessage,
+    setImageMessage,
+    setImageRecived,
+    initImageMessage
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -79,6 +83,12 @@ const ChatWebSocket = () => {
       setIsAnsweringVideoCall({...data});
     });
 
+    chatSocket.on('image-message-recived', (data) => {
+      console.log("Image Message Recived:", data);
+      setImageRecived(data);
+      //fetchConversations();
+    });
+
     return () => {
       chatSocket.disconnect();
     };
@@ -105,6 +115,14 @@ const ChatWebSocket = () => {
       setPeerVideoSignal(initDataVideoCall);
     }
   }, [peerVideoSignal]);
+
+  useEffect(() => {
+    if (imageMessage.content !== "") {
+      chatSocket?.emit('image-message', imageMessage);
+      console.log("Image Message:", imageMessage);
+      setImageMessage(initImageMessage);
+    }
+  }, [imageMessage]);
 
   const fetchConversations = async () => {
     try {
