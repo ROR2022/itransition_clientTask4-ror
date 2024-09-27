@@ -48,6 +48,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   useEffect(() => {
     if (isAnsweringVideoCall.signal !== null) {
       console.log("ModalVideoChat isAnsweringCall:", isAnsweringVideoCall);
+      //setStream(isAnsweringVideoCall.signal);
       setIsAnsweringVideoCall(initDataVideoCall);
     }
   }, [isAnsweringVideoCall]);
@@ -120,17 +121,16 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   return (
     <div>
       
-
+      <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
+      <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
       {isReciver ? (
         <>
-          <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
           <Button variant="contained" color="primary" onClick={()=>answerCall(incomingVideoSignal.signal, incomingVideoSignal.sender,incomingVideoSignal.reciver)}>
             Answer VideoCall
           </Button>
         </>
       ) : (
         <>
-        <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
         <Button variant="contained" color="primary" onClick={startCall}>
           Init VideoCall
         </Button>
