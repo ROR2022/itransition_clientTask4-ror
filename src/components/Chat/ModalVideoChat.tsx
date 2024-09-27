@@ -40,6 +40,7 @@ const ModalVideoChat: FC<ModalVideoChatProps> = ({
   return (
     <div
     style={{
+        maxHeight: '80vh',
         maxWidth: '90vw',
         overflow: 'auto'
     }}

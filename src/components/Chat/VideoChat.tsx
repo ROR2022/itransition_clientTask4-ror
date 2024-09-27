@@ -152,6 +152,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   return (
     <div
     style={{
+        maxHeight: '80vh',
         maxWidth: '90vw',
         overflow: 'auto'
     }}
