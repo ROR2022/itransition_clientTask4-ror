@@ -57,10 +57,10 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   useEffect(() => {
     if(peerVideoSignal.signal !== null){
       console.log('VideoChat peerVideoSignal:',peerVideoSignal);
-      //answerCall(peerVideoSignal.signal,peerVideoSignal.sender,peerVideoSignal.reciver);
-      //setPeerVideoSignal(initDataVideoCall);
+      answerCall(peerVideoSignal.signal,peerVideoSignal.sender,peerVideoSignal.reciver);
+      setPeerVideoSignal(initDataVideoCall);
     }else{
-        console.log('VideoChat no signal peerVideoSignal:',peerVideoSignal);
+        //console.log('VideoChat no signal peerVideoSignal:');
     }
   },[peerVideoSignal]);
 
@@ -150,7 +150,12 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     peerRef.current = peer;
   };
   return (
-    <div>
+    <div
+    style={{
+        maxWidth: '90vw',
+        overflow: 'auto'
+    }}
+    >
       <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
       {isOtherStream && (
         <>
