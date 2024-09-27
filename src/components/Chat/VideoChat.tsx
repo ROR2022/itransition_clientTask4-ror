@@ -129,6 +129,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     setLoading(true);
     const peer = new Peer({ initiator: false, trickle: false, stream });
     console.log("Answer Call:", signalData);
+    console.log(sender,reciver);
     peer.on("signal", (data) => {
       // Enviar respuesta al servidor
       console.log("VideoChat Answer Signal:", data);
@@ -142,7 +143,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
         //setPeerVideoSignal({ signal: data as ISignalData, sender, reciver });
-        //setIncomingVideoSignal(initDataVideoCall);
+        setIncomingVideoSignal(initDataVideoCall);
         setLoading(false);  
       }
     });
