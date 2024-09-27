@@ -14,6 +14,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   const [isReciver, setIsReciver] = useState(false);
   const [isOtherStream, setIsOtherStream] = useState(false);
   const [loading, setLoading] = useState(false);
+  //const [otherVideo, setOtherVideo] = useState<MediaStream | null>(null);
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const otherVideoRef = useRef<HTMLVideoElement>(null);
   const peerRef = useRef<Peer.Instance | null>(null);
@@ -56,6 +57,11 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     if (isAnsweringVideoCall.signal !== null) {
       console.log("ModalVideoChat isAnsweringCall:", isAnsweringVideoCall);
       //setStream(isAnsweringVideoCall.signal);
+        answerCall(
+            isAnsweringVideoCall.signal,
+            isAnsweringVideoCall.sender,
+            isAnsweringVideoCall.reciver
+        );
       setIsAnsweringVideoCall(initDataVideoCall);
     }
   }, [isAnsweringVideoCall]);
@@ -96,6 +102,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
+        
       }
     });
 
@@ -125,6 +132,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
+        
       }
     });
 
@@ -136,6 +144,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       {isOtherStream && (
         <>
           <p>Other Stream:</p>  
+            
         </>
       )}
       <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
