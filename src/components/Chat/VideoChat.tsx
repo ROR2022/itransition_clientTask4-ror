@@ -59,6 +59,8 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       console.log('VideoChat peerVideoSignal:',peerVideoSignal);
       //answerCall(peerVideoSignal.signal,peerVideoSignal.sender,peerVideoSignal.reciver);
       //setPeerVideoSignal(initDataVideoCall);
+    }else{
+        console.log('VideoChat no signal peerVideoSignal:',peerVideoSignal);
     }
   },[peerVideoSignal]);
 
