@@ -7,7 +7,7 @@ import VideoChatIcon from '@mui/icons-material/VideoChat';
 import ModalVideoChat from './ModalVideoChat'
 
 const HeaderConversation = () => {
-  const {dataUserChat,conversationActive} = useContext(ChatContext);
+  const {dataUserChat,conversationActive, incomingVideoSignal} = useContext(ChatContext);
   const {participants} = conversationActive || {participants: []};
   const [participant, setParticipant] = useState({nickname: '', avatar: ''});
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -23,6 +23,12 @@ const HeaderConversation = () => {
     setParticipant(participantTmp);
     }
   },[conversationActive])
+
+  useEffect(() => {
+    if(incomingVideoSignal.signal!==null){
+      setIsOpenModal(true);
+    }
+  },[incomingVideoSignal])
 
   const handleVideoChat = () => {
     const dataParticipants={
