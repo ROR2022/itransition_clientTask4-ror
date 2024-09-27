@@ -89,7 +89,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   };
 
   const answerCall = (
-    signalData: SignalData,
+    signalData: SignalData|null,
     sender: string,
     reciver: string
   ) => {
@@ -101,6 +101,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       setPeerVideoSignal({ signal: data as ISignalData, sender, reciver });
     });
 
+    if (signalData)
     peer.signal(signalData);
 
     peer.on("stream", (otherStream) => {
@@ -115,10 +116,19 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   return (
     <div>
       <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
-      <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
-      <Button variant="contained" color="primary" onClick={startCall}>
-        Iniciar llamada
-      </Button>
+
+      {isAnsweringVideoCall.signal !== null ? (
+        <>
+          <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
+          <Button variant="contained" color="primary" onClick={()=>answerCall(isAnsweringVideoCall.signal, isAnsweringVideoCall.sender,isAnsweringVideoCall.reciver)}>
+            Answer VideoCall
+          </Button>
+        </>
+      ) : (
+        <Button variant="contained" color="primary" onClick={startCall}>
+          Init VideoCall
+        </Button>
+      )}
     </div>
   );
 };
