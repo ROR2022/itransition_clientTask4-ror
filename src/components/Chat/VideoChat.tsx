@@ -3,7 +3,7 @@ import Peer, { SignalData } from "simple-peer";
 import { useContext } from "react";
 import { ChatContext, ISignalData, IVideoCall } from "./context/ChatContext";
 import { Button } from "@mui/material";
-import {CircularProgress} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 interface IVideoChat {
   dataParticipantsVideoChat: { sender: string; reciver: string };
@@ -103,7 +103,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   };
 
   const answerCall = (
-    signalData: SignalData|null,
+    signalData: SignalData | null,
     sender: string,
     reciver: string
   ) => {
@@ -118,8 +118,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       setLoading(false);
     });
 
-    if (signalData)
-    peer.signal(signalData);
+    if (signalData) peer.signal(signalData);
 
     peer.on("stream", (otherStream) => {
       console.log("Answer call Other Stream:", otherStream);
@@ -133,21 +132,35 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   };
   return (
     <div>
-      
       <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
-      <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
+      {isOtherStream && (
+        <>
+          <p>Other Stream:</p>
+          <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
+        </>
+      )}
+
       {isReciver ? (
         <>
-          <Button variant="contained" color="primary" onClick={()=>answerCall(incomingVideoSignal.signal, incomingVideoSignal.sender,incomingVideoSignal.reciver)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() =>
+              answerCall(
+                incomingVideoSignal.signal,
+                incomingVideoSignal.sender,
+                incomingVideoSignal.reciver
+              )
+            }
+          >
             {loading ? <CircularProgress size={20} /> : "Answer VideoCall"}
-            
           </Button>
         </>
       ) : (
         <>
-        <Button variant="contained" color="primary" onClick={startCall}>
+          <Button variant="contained" color="primary" onClick={startCall}>
             {loading ? <CircularProgress size={20} /> : "Start VideoCall"}
-        </Button>
+          </Button>
         </>
       )}
     </div>
