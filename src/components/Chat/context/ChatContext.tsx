@@ -101,9 +101,11 @@ export const ChatContext = createContext({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setPeerVideoSignal: (_peerVideoSignal: IVideoCall) => {},
   imageMessage: initImageMessage,
-  setImageMessage: (_imageMessage: TimageMessage) => {console.log('imageMessage')},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setImageMessage: (_imageMessage: TimageMessage) => {},
   imageRecived: initImageMessage,
-  setImageRecived: (_imageRecived: TimageMessage) => {console.log('imageRecived')},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setImageRecived: (_imageRecived: TimageMessage) => {},
   initImageMessage,
   initVideoSignal,
   initDataUser,
