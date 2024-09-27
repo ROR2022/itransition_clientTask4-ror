@@ -3,6 +3,7 @@ import Peer, { SignalData } from "simple-peer";
 import { useContext } from "react";
 import { ChatContext, ISignalData, IVideoCall } from "./context/ChatContext";
 import { Button } from "@mui/material";
+import {CircularProgress} from "@mui/material";
 
 interface IVideoChat {
   dataParticipantsVideoChat: { sender: string; reciver: string };
@@ -11,6 +12,8 @@ interface IVideoChat {
 const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [isReciver, setIsReciver] = useState(false);
+  const [isOtherStream, setIsOtherStream] = useState(false);
+  const [loading, setLoading] = useState(false);
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const otherVideoRef = useRef<HTMLVideoElement>(null);
   const peerRef = useRef<Peer.Instance | null>(null);
@@ -68,6 +71,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
 
   const startCall = () => {
     if (!stream) return;
+    setLoading(true);
     const peer = new Peer({ initiator: true, trickle: false, stream });
     console.log("Start Call:", dataParticipantsVideoChat);
     peer.on("signal", (data) => {
@@ -80,12 +84,14 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
         reciver: dataParticipantsVideoChat.reciver,
       };
       setIsMakingVideoCall({ ...dataCall });
+      setLoading(false);
     });
 
     peer.on("stream", (otherStream) => {
       console.log("Start call Other Stream:", otherStream);
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
+        setIsOtherStream(true);
       }
     });
 
@@ -98,12 +104,14 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     reciver: string
   ) => {
     if (!stream) return;
+    setLoading(true);
     const peer = new Peer({ initiator: false, trickle: false, stream });
     console.log("Answer Call:", signalData);
     peer.on("signal", (data) => {
       // Enviar respuesta al servidor
       setPeerVideoSignal({ signal: data as ISignalData, sender, reciver });
       setIncomingVideoSignal(initDataVideoCall);
+      setLoading(false);
     });
 
     if (signalData)
@@ -113,6 +121,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       console.log("Answer call Other Stream:", otherStream);
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
+        setIsOtherStream(true);
       }
     });
 
@@ -126,13 +135,14 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       {isReciver ? (
         <>
           <Button variant="contained" color="primary" onClick={()=>answerCall(incomingVideoSignal.signal, incomingVideoSignal.sender,incomingVideoSignal.reciver)}>
-            Answer VideoCall
+            {loading ? <CircularProgress size={20} /> : "Answer VideoCall"}
+            
           </Button>
         </>
       ) : (
         <>
         <Button variant="contained" color="primary" onClick={startCall}>
-          Init VideoCall
+            {loading ? <CircularProgress size={20} /> : "Start VideoCall"}
         </Button>
         </>
       )}
