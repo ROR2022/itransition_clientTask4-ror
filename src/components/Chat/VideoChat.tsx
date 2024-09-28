@@ -133,6 +133,8 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     peer.on("signal", (data) => {
       // Enviar respuesta al servidor
       console.log("VideoChat Answer Signal:", data);
+      setPeerVideoSignal({ signal: data as SignalData, sender, reciver });
+      setLoading(false);
     });
 
     if (signalData) peer.signal(signalData);
@@ -142,7 +144,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
-        //setPeerVideoSignal({ signal: data as ISignalData, sender, reciver });
+        
         setIncomingVideoSignal(initDataVideoCall);
         setLoading(false);  
       }
@@ -181,13 +183,13 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
               )
             }
           >
-            {loading ? <CircularProgress size={20} /> : "Answer VideoCall"}
+            {loading ? <CircularProgress sx={{color:'white'}} size={20} /> : "Answer VideoCall"}
           </Button>
         </>
       ) : (
         <>
           <Button variant="contained" color="primary" onClick={startCall}>
-            {loading ? <CircularProgress size={20} /> : "Start VideoCall"}
+            {loading ? <CircularProgress sx={{color:'white'}} size={20} /> : "Start VideoCall"}
           </Button>
         </>
       )}
