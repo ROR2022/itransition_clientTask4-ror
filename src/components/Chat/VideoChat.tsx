@@ -181,17 +181,27 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
 
       {!hideButton && isReciver && (
         <>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '10px',
+            }}
+        >
             <Image
                 src="/telephone1.png"
                 alt="Video Call"
                 width={40}
                 height={40}
                 style={{
-                    width: "40px",
-                    height: "40px",
+                    width: "150px",
+                    height: "auto",
                 }}
             />
             <audio src="/ring-ring.mp3" autoPlay loop />
+            </div>
           <Button
             variant="contained"
             color="primary"
