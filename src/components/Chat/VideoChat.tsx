@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { ChatContext, ISignalData, IVideoCall } from "./context/ChatContext";
 import { Button } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import Image from "next/image";
 
 interface IVideoChat {
   dataParticipantsVideoChat: { sender: string; reciver: string };
@@ -180,6 +181,17 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
 
       {!hideButton && isReciver && (
         <>
+            <Image
+                src="/telephone1.png"
+                alt="Video Call"
+                width={40}
+                height={40}
+                style={{
+                    width: "40px",
+                    height: "40px",
+                }}
+            />
+            <audio src="/ring-ring.mp3" autoPlay loop />
           <Button
             variant="contained"
             color="primary"
