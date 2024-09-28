@@ -21,7 +21,6 @@ const FooterConversation = () => {
     setConversationActive,
     initConversationActive,
     setEmitingMessage,
-    setImageMessage,
   } = useContext(ChatContext);
 
   useEffect(() => {
