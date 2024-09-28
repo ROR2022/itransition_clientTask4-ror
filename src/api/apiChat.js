@@ -137,6 +137,7 @@ export const deleteConversation = async (idConversation) => {
 
 export const getConversationsByParticipantId = async (participantId) => {
   try {
+    console.log('getConversationsByParticipantId:..',participantId);
     const response = await axios.get(
       `${hostURL}/api/conversation/byParticipantId/${participantId}`
     );
