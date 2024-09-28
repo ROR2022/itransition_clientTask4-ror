@@ -124,7 +124,13 @@ const MyConversations = () => {
       const tempConversations = [] as IConversation[];
       //console.log("hideConversations:", dataUserChat.hideConversations);
       //console.log("dataConversations res:", res);
-      res.forEach((conversation: IConversation) => {
+      
+
+      if (!res||res.length === 0||res.error) {
+        setUserConversations([]);
+        return;
+      }
+      res?.forEach((conversation: IConversation) => {
         const findConversation = dataUserChat.hideConversations?.find(
           (hideConversation) =>
             String(hideConversation) === String(conversation._id)

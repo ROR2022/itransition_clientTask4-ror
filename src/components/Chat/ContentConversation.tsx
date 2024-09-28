@@ -150,7 +150,7 @@ const ContentConversation = () => {
               color: "#666",
             }}
           >
-            {formatDate(new Date(updatedAt))}
+            {formatDate(new Date(updatedAt||''))}
           </Typography>
           {dataMessages.map((dataMessage) => {
             const { message, sender } = dataMessage;
