@@ -73,6 +73,8 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
             isAnsweringVideoCall.sender,
             isAnsweringVideoCall.reciver
         ); */
+        peerRef.current?.signal(isAnsweringVideoCall.signal);
+        setLoading(false);
       setIsAnsweringVideoCall(initDataVideoCall);
     }
   }, [isAnsweringVideoCall]);
@@ -137,7 +139,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       setLoading(false);
     });
 
-    if (signalData) peer.signal(signalData);
+    if (isAnsweringVideoCall.signal!==null) peer.signal(isAnsweringVideoCall.signal);
 
     peer.on("stream", (otherStream) => {
       console.log("Answer call Other Stream:", otherStream);
