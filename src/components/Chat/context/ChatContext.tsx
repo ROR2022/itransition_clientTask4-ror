@@ -23,6 +23,7 @@ const initUserConversations = [] as IConversation[];
 const initMessage = {
   _id: "",
   message: "",
+  type: "",
   sender: {
     _id: "",
     nickname: "",
