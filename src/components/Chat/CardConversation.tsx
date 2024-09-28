@@ -148,8 +148,7 @@ const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
           }}
         >
           {
-            dataConversation.messages[dataConversation.messages.length - 1]
-              ?.message
+            lastMessage
           }
         </p>
       </div>
