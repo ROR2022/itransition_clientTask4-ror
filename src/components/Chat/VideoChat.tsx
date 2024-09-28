@@ -64,6 +64,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
         peerVideoSignal.sender,
         peerVideoSignal.reciver
       );
+      peerRef.current?.signal(peerVideoSignal.signal);
       setPeerVideoSignal(initDataVideoCall);
     } else {
       //console.log('VideoChat no signal peerVideoSignal:');
@@ -128,6 +129,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     });
 
     peerRef.current = peer;
+    
   };
 
   const answerCall = (
@@ -162,6 +164,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
     });
 
     peerRef.current = peer;
+    
   };
   return (
     <div
