@@ -17,6 +17,7 @@ interface ICardConversation {
 
 const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
   const [statusParticipant, setStatusParticipant] = useState(false);
+  const [lastMessage, setLastMessage] = useState("");
   const {
     dataUserChat,
     setConversationActive,
@@ -36,6 +37,16 @@ const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
     console.log("Selecting Conversation:", dataConversation);
     setConversationActive(dataConversation);
   };
+
+  useEffect(() => {
+    const tempLastMessage = dataConversation.messages[dataConversation.messages.length - 1];
+    if(tempLastMessage.type==='text'){
+      setLastMessage(tempLastMessage.message);
+    }else{
+      setLastMessage('Image');
+    }
+    
+  }, [dataConversation]);
 
   useEffect(() => {
     if(usersOnline.includes(participant.nickname)){
