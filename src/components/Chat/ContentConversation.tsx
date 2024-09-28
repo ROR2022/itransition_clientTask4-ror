@@ -182,7 +182,7 @@ const ContentConversation = () => {
                   >
                     {type === "text" &&
                         message
-                    } -
+                    } 
                     {type==='image' && (
                         <Image
                             src={message}
