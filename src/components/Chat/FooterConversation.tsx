@@ -35,6 +35,7 @@ const FooterConversation = () => {
     try {
       const dataMessageTmp = {
         message: messageTmp,
+        type: "text",
         sender: dataUserChat._id,
         reciver:
           conversationActive.participants[0]._id === dataUserChat._id
@@ -91,18 +92,61 @@ const FooterConversation = () => {
       setImageTmp(e.target.files[0]);
       //setMessageTmp(e.target.files[0].name);
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async() => {
         const base64Image = reader.result;
-        setImageMessage({
+        /* setImageMessage({
           content: base64Image as string,
           sender: dataUserChat.nickname,
           reciver: conversationActive.participants[0]._id === dataUserChat._id
           ? conversationActive.participants[1].nickname
           : conversationActive.participants[0].nickname,
-        })
+        }) */
+        const dataMessageTmp = {
+          message: base64Image as string,
+          type: "image",
+          sender: dataUserChat._id,
+          reciver:
+            conversationActive.participants[0]._id === dataUserChat._id
+              ? conversationActive.participants[1]._id
+              : conversationActive.participants[0]._id,
+          conversation: conversationActive._id,
+        };
+        const resCreateMessage = await createMessage(dataMessageTmp);
+        console.log("resCreateMessage:", resCreateMessage);
+        const resAddMessageToConversation = await addMessageToConversation(
+          conversationActive._id,
+          resCreateMessage._id
+        );
+        console.log("resAddMessageToConversation:", resAddMessageToConversation);
+        const resConversations = await getConversationsByParticipantId(
+          dataUserChat._id
+        );
+        console.log("resConversations:", resConversations);
+        //filter conversations with hideConversations
+        const tempConversations = [] as IConversation[];
+        resConversations.forEach((conversation: IConversation) => {
+          const findConversation = dataUserChat.hideConversations?.find(
+            (hideConversation) => hideConversation === conversation._id
+          );
+          if (!findConversation) {
+            tempConversations.push(conversation);
+          }
+        });
+        setUserConversations(tempConversations);
+        const findConversation = tempConversations.find(
+          (conversation: IConversation) =>
+            conversation._id === conversationActive._id
+        );
+        if (findConversation) {
+          setConversationActive(findConversation);
+        } else {
+          setConversationActive(initConversationActive);
+        }
+        setEmitingMessage(resCreateMessage);
+        window.scrollTo(0, document.body.scrollHeight);
       };
-      const imageUrl=reader.readAsDataURL(e.target.files[0]);
-      console.log("Image URL:",imageUrl);
+      reader.readAsDataURL(e.target.files[0]);
+      //console.log("Image URL:",imageUrl);
     }
   };
 

@@ -15,6 +15,7 @@ export interface IParticipant {
 export interface IMessage {
   _id: string;
   message: string;
+  type: string;
   sender: IParticipant;
   reciver: IParticipant;
   updatedAt: Date;

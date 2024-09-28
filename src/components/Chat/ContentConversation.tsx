@@ -153,7 +153,7 @@ const ContentConversation = () => {
             {formatDate(new Date(updatedAt||''))}
           </Typography>
           {dataMessages.map((dataMessage) => {
-            const { message, sender } = dataMessage;
+            const { message, sender, type } = dataMessage;
             const isMe = sender?.nickname === nickname;
             return (
               <div
@@ -180,7 +180,22 @@ const ContentConversation = () => {
                       padding: "0px",
                     }}
                   >
-                    {message}
+                    {type === "text" &&
+                        message
+                    } -
+                    {type==='image' && (
+                        <Image
+                            src={message}
+                            alt="image"
+                            width={200}
+                            height={200}
+                            style={{
+                                width: "100px",
+                                height: "auto",
+                            
+                            }}
+                        />
+                    )}
                   </p>
                 </div>
                 <p
