@@ -11,7 +11,7 @@ import ChatWebSocket from "./ChatWebSocket";
 //import { on } from "events";
 
 const DataMainUser = () => {
-  const { dataUserChat, setDataUserChat } = useContext(ChatContext);
+  const { dataUserChat, setDataUserChat, setConversationActive,initConversationActive } = useContext(ChatContext);
   const [nickNameUser, setNickNameUser] = useState(dataUserChat.nickname);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(dataUserChat.avatar);
   const [hideAvatares, setHideAvatares] = useState(dataUserChat.nickname ? true : false);
@@ -59,6 +59,7 @@ const DataMainUser = () => {
           _id: resCreateParticipant._id,
         });
         setIsSavedChanges(true);
+        setConversationActive(initConversationActive);
       }else{
         const dataParticipantTmp = {
           nickname: nickNameUser,
@@ -74,6 +75,7 @@ const DataMainUser = () => {
           _id: resGetParticipant._id,
         });
         setIsSavedChanges(true);
+        setConversationActive(initConversationActive);
       }
 
     } catch (error) {
