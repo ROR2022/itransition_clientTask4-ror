@@ -14,6 +14,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   const [isReciver, setIsReciver] = useState(false);
   const [isOtherStream, setIsOtherStream] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hideButton, setHideButton] = useState(false);
   //const [otherVideo, setOtherVideo] = useState<MediaStream | null>(null);
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const otherVideoRef = useRef<HTMLVideoElement>(null);
@@ -55,26 +56,31 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   }, [isOtherStream]);
 
   useEffect(() => {
-    if(peerVideoSignal.signal !== null){
-      console.log('VideoChat peerVideoSignal:',peerVideoSignal);
-      answerCall(peerVideoSignal.signal,peerVideoSignal.sender,peerVideoSignal.reciver);
+    if (peerVideoSignal.signal !== null) {
+      console.log("VideoChat peerVideoSignal:", peerVideoSignal);
+      answerCall(
+        peerVideoSignal.signal,
+        peerVideoSignal.sender,
+        peerVideoSignal.reciver
+      );
       setPeerVideoSignal(initDataVideoCall);
-    }else{
-        //console.log('VideoChat no signal peerVideoSignal:');
+    } else {
+      //console.log('VideoChat no signal peerVideoSignal:');
     }
-  },[peerVideoSignal]);
+  }, [peerVideoSignal]);
 
   useEffect(() => {
     if (isAnsweringVideoCall.signal !== null) {
       console.log("ModalVideoChat isAnsweringCall:", isAnsweringVideoCall);
       //setStream(isAnsweringVideoCall.signal);
-        /* answerCall(
+      /* answerCall(
             isAnsweringVideoCall.signal,
             isAnsweringVideoCall.sender,
             isAnsweringVideoCall.reciver
         ); */
-        peerRef.current?.signal(isAnsweringVideoCall.signal);
-        setLoading(false);
+      peerRef.current?.signal(isAnsweringVideoCall.signal);
+      setLoading(false);
+      setHideButton(true);
       setIsAnsweringVideoCall(initDataVideoCall);
     }
   }, [isAnsweringVideoCall]);
@@ -95,6 +101,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   const startCall = () => {
     if (!stream) return;
     setLoading(true);
+
     const peer = new Peer({ initiator: true, trickle: false, stream });
     console.log("Start Call:", dataParticipantsVideoChat);
     peer.on("signal", (data) => {
@@ -108,6 +115,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       };
       setIsMakingVideoCall({ ...dataCall });
       setLoading(false);
+      setHideButton(true);
     });
 
     peer.on("stream", (otherStream) => {
@@ -115,7 +123,6 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
-        
       }
     });
 
@@ -129,9 +136,10 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   ) => {
     if (!stream) return;
     setLoading(true);
+    setHideButton(true);
     const peer = new Peer({ initiator: false, trickle: false, stream });
     console.log("Answer Call:", signalData);
-    console.log(sender,reciver);
+    console.log(sender, reciver);
     peer.on("signal", (data) => {
       // Enviar respuesta al servidor
       console.log("VideoChat Answer Signal:", data);
@@ -146,9 +154,9 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
       if (otherVideoRef.current) {
         otherVideoRef.current.srcObject = otherStream;
         setIsOtherStream(true);
-        
+
         setIncomingVideoSignal(initDataVideoCall);
-        setLoading(false);  
+        setLoading(false);
       }
     });
 
@@ -156,23 +164,21 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
   };
   return (
     <div
-    style={{
-        maxHeight: '80vh',
-        maxWidth: '90vw',
-        overflow: 'auto'
-    }}
+      style={{
+        maxHeight: "80vh",
+        maxWidth: "90vw",
+        overflow: "auto",
+      }}
     >
       <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
       {isOtherStream && (
         <>
-          <p>Other Stream:</p>  
-            
+          <p>Other Stream:</p>
         </>
       )}
       <video ref={otherVideoRef} autoPlay style={{ width: "300px" }} />
-      
 
-      {isReciver ? (
+      {!hideButton && isReciver && (
         <>
           <Button
             variant="contained"
@@ -185,13 +191,23 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
               )
             }
           >
-            {loading ? <CircularProgress sx={{color:'white'}} size={20} /> : "Answer VideoCall"}
+            {loading ? (
+              <CircularProgress sx={{ color: "white" }} size={20} />
+            ) : (
+              "Answer VideoCall"
+            )}
           </Button>
         </>
-      ) : (
+      )} 
+      {!hideButton && !isReciver &&
+      (
         <>
           <Button variant="contained" color="primary" onClick={startCall}>
-            {loading ? <CircularProgress sx={{color:'white'}} size={20} /> : "Start VideoCall"}
+            {loading ? (
+              <CircularProgress sx={{ color: "white" }} size={20} />
+            ) : (
+              "Start VideoCall"
+            )}
           </Button>
         </>
       )}
