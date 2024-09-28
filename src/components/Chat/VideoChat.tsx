@@ -170,7 +170,7 @@ const VideoChat: FC<IVideoChat> = ({ dataParticipantsVideoChat }) => {
         overflow: "auto",
       }}
     >
-      <video ref={myVideoRef} autoPlay muted style={{ width: "300px" }} />
+      <video ref={myVideoRef} autoPlay style={{ width: "300px" }} />
       {isOtherStream && (
         <>
           <p>Other Stream:</p>
