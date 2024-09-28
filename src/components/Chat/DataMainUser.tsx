@@ -24,6 +24,9 @@ const DataMainUser = () => {
     
   },[]);
 
+  useEffect(() => {
+  },[dataUserChat]);
+
   const fetchDataUserChat = async() => {
     try {
       const res = await getParticipantById(dataUserChat._id);
