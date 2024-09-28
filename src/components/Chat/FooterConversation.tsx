@@ -1,4 +1,4 @@
-import { Box, IconButton, TextField } from "@mui/material";
+import { Box, IconButton, TextField, Tooltip } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -163,6 +163,7 @@ const FooterConversation = () => {
           height: "100%",
         }}
       >
+        <Tooltip title="Add Image" placement="top">
         <IconButton>
           <label htmlFor="upload-photo">
           <AddPhotoAlternateIcon color="info" />
@@ -175,6 +176,7 @@ const FooterConversation = () => {
             onChange={handleImageChange}
           />
         </IconButton>
+        </Tooltip>
         <TextField
           sx={{
             width: "80%",
