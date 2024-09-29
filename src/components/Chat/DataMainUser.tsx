@@ -18,7 +18,7 @@ const DataMainUser = () => {
   const [isSavedChanges, setIsSavedChanges] = useState(false);
 
   useEffect(() => {
-    if(dataUserChat._id!==''){
+    if(dataUserChat._id&&dataUserChat._id!==''){
       fetchDataUserChat();
     }
     
