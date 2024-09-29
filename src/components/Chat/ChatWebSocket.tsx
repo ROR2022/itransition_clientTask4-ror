@@ -110,6 +110,7 @@ const ChatWebSocket = () => {
       };
   
       //chatSocket.emit("join", JSON.stringify(dataJoin));
+      console.log("Emiting Join:", dataJoin);
       chatSocket?.emit('join', JSON.stringify(dataJoin));
     }
   },[dataUserChat]);
