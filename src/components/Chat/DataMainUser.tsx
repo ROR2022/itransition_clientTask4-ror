@@ -11,8 +11,8 @@ import ChatWebSocket from "./ChatWebSocket";
 //import { on } from "events";
 
 const DataMainUser = () => {
-  const { dataUserChat, setDataUserChat, setConversationActive,initConversationActive } = useContext(ChatContext);
-  const [nickNameUser, setNickNameUser] = useState(dataUserChat.nickname);
+  const { dataUserChat, setDataUserChat, setConversationActive,initConversationActive, setUserLeaving, initDataUser } = useContext(ChatContext);
+  const [nickNameUser, setNickNameUser] = useState<string>(dataUserChat.nickname);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(dataUserChat.avatar);
   const [hideAvatares, setHideAvatares] = useState(dataUserChat.nickname ? true : false);
   const [isSavedChanges, setIsSavedChanges] = useState(false);
@@ -44,10 +44,14 @@ const DataMainUser = () => {
   }
   
   const handleSaveNickName = async() => {
-    //console.log(nickNameUser);
-    //console.log(selectedAvatar);
-    setHideAvatares(true);
     
+    if(nickNameUser===''&&dataUserChat.nickname!==''){
+      //user is leaving
+      setUserLeaving(dataUserChat.nickname);
+      setDataUserChat(initDataUser);
+      return;
+    }
+    setHideAvatares(true);
     try {
       const resGetParticipant = await getParticipantByNickname(nickNameUser);
       console.log('resGetParticipant:',resGetParticipant);

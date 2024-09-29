@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { IConversation, IMessage, IParticipant } from "../MyConversations";
 import { SignalData } from "simple-peer";
+//import { setUser } from "@/redux/userSlice";
 
 export const initDataUser: IParticipant = {
   _id: "",
@@ -107,6 +108,9 @@ export const ChatContext = createContext({
   imageRecived: initImageMessage,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setImageRecived: (_imageRecived: TimageMessage) => {},
+  userLeaving: '',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setUserLeaving: (_userLeaving: string) => {},
   initImageMessage,
   initVideoSignal,
   initDataUser,
@@ -147,6 +151,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [imageMessage, setImageMessage] = useState<TimageMessage>(initImageMessage);
     const [imageRecived, setImageRecived] = useState<TimageMessage>(initImageMessage);
+    const [userLeaving, setUserLeaving] = useState<string>('');
 
   useEffect(() => {}, [dataUserChat]);
 
@@ -177,6 +182,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         setImageMessage,
         imageRecived,
         setImageRecived,
+        userLeaving,
+        setUserLeaving,
         initImageMessage,
         initVideoSignal,
         initDataUser,

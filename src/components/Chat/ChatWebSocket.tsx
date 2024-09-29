@@ -27,7 +27,8 @@ const ChatWebSocket = () => {
     imageMessage,
     setImageMessage,
     setImageRecived,
-    initImageMessage
+    initImageMessage,
+    userLeaving
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -88,6 +89,13 @@ const ChatWebSocket = () => {
       chatSocket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (userLeaving !== "") {
+      chatSocket?.emit("leave", userLeaving);
+      console.log("User Leaving:", userLeaving);
+    }
+  }, [userLeaving]);
 
   useEffect(() => {
     if (emitingMessage._id !== "") {
