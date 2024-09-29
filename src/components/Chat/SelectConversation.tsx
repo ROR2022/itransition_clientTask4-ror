@@ -20,7 +20,7 @@ const BadgeParticipant = ({ participant }: { participant: IParticipant }) => {
   const fetchDataParticipant = async () => {
     try {
       const res = await getParticipantByNickname(participant.nickname);
-      console.log("Participant:", res);
+      //console.log("Participant:", res);
       if(usersOnline.includes(res.nickname)||res.online===true){
         setStatusParticipant(true);
       }else{
@@ -31,7 +31,7 @@ const BadgeParticipant = ({ participant }: { participant: IParticipant }) => {
     }
   };
   useEffect(() => {
-    console.log("Users Online:", usersOnline);
+    //console.log("Users Online:", usersOnline);
     //changeStatusParticipants();
     if(usersOnline.includes(participant.nickname)){
       setStatusParticipant(true);

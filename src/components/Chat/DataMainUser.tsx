@@ -118,9 +118,9 @@ const DataMainUser = () => {
         background: 'radial-gradient(circle, rgba(221,221,221,1) 0%, rgba(0,212,255,1) 52%, rgba(221,221,221,1) 100%)'
       }}
     >
-      {isSavedChanges||dataUserChat._id!=='' && (
+      
         <ChatWebSocket/>
-      )}
+      
       <Box
       sx={{
         display: 'flex',

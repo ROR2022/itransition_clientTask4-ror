@@ -28,7 +28,8 @@ const ChatWebSocket = () => {
     setImageMessage,
     setImageRecived,
     initImageMessage,
-    userLeaving
+    userLeaving,
+    setUserLeaving,
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const ChatWebSocket = () => {
       //const dataMessage = JSON.parse(data);
         fetchConversations();
     });
+
 
     
 
@@ -87,6 +89,11 @@ const ChatWebSocket = () => {
 
     return () => {
       chatSocket.disconnect();
+      console.log("Disconnected from WebSocket server:");
+      if(dataUserChat.nickname!==''){
+        console.log("User Leaving:", dataUserChat.nickname);
+        setUserLeaving(dataUserChat.nickname);
+      }
     };
   }, []);
 

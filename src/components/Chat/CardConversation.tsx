@@ -7,7 +7,7 @@ import { dataAvatares } from "@/dataEnv/dataEnv";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { IconButton } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import {  deleteConversation } from "@/api/apiChat";
+import {  deleteConversation, getParticipantByNickname } from "@/api/apiChat";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { HiOutlineStatusOffline } from "react-icons/hi";
 
@@ -27,11 +27,32 @@ const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
     usersOnline
   } = useContext(ChatContext);
   const { participants } = dataConversation;
-  const participant =
+  const [participant, setParticipant] = useState(
     participants[1].nickname === dataUserChat.nickname
-      ? participants[0]
-      : participants[1] || { nickname: "", avatar: "" };
+    ? participants[0]
+    : participants[1] || { nickname: "", avatar: "" }
+  );
+    
   const { nickname, avatar } = participant;
+
+  useEffect(() => {
+    if (participant.nickname !== "") {
+      fetchDataParticipant();
+    }
+  }, []);
+
+  const fetchDataParticipant = async () => {
+    try {
+      const res = await getParticipantByNickname(participant.nickname);
+      console.log("Participant:", res);
+      setParticipant(res);
+      if(usersOnline.includes(res.nickname)||res.online===true){
+        setStatusParticipant(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSelectConversation = () => {
     console.log("Selecting Conversation:", dataConversation);
@@ -40,7 +61,7 @@ const CardConversation: FC<ICardConversation> = ({ dataConversation }) => {
 
   useEffect(() => {
     const tempLastMessage = dataConversation.messages[dataConversation.messages.length - 1];
-    if(tempLastMessage.type==='text'){
+    if(tempLastMessage&& tempLastMessage?.type==='text'){
       setLastMessage(tempLastMessage.message);
     }else{
       setLastMessage('Image');

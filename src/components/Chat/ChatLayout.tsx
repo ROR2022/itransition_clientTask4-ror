@@ -19,7 +19,7 @@ const ChatLayout = () => {
     //console.log(dataUserChat);
   }, [conversationActive]);
   useEffect(() => {
-    console.log('dataUserChat:',dataUserChat);
+    //console.log('dataUserChat:',dataUserChat);
   }, [dataUserChat]);
   return (
     <>
