@@ -45,14 +45,23 @@ const DataMainUser = () => {
   
   const handleSaveNickName = async() => {
     
-    if(nickNameUser===''&&dataUserChat.nickname!==''){
-      //user is leaving
-      setUserLeaving(dataUserChat.nickname);
-      setDataUserChat(initDataUser);
-      return;
-    }
-    setHideAvatares(true);
+    
     try {
+
+      if(nickNameUser===''&&dataUserChat.nickname!==''){
+        //user is leaving
+        setUserLeaving(dataUserChat.nickname);
+        setDataUserChat(initDataUser);
+        if(dataUserChat._id&&dataUserChat._id!==''){
+          const resUpdateParticipant = await updateParticipant(dataUserChat._id, {online: false});
+          console.log('resUpdateParticipant:',resUpdateParticipant);
+        }
+        return;
+      }
+      setHideAvatares(true);
+
+
+
       const resGetParticipant = await getParticipantByNickname(nickNameUser);
       console.log('resGetParticipant:',resGetParticipant);
       if(!resGetParticipant){
