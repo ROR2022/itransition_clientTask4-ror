@@ -102,6 +102,7 @@ const ChatWebSocket = () => {
   }, [isMakingVideoCall]);
 
   useEffect(() => {
+    console.log("ChatWebSocket dataUserChat:", dataUserChat);
     if (dataUserChat.nickname !== "") {
       //fetchConversations();
       const dataJoin = {
