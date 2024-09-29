@@ -23,7 +23,7 @@ const ChatLayout = () => {
   }, [dataUserChat]);
   return (
     <>
-      {dataUserChat.nickname&&dataUserChat.nickname === "" ? (
+      {!dataUserChat.nickname||dataUserChat.nickname === "" ? (
         <p>No User</p>
       ) : (
         <Box

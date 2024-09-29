@@ -11,7 +11,7 @@ import ChatWebSocket from "./ChatWebSocket";
 //import { on } from "events";
 
 const DataMainUser = () => {
-  const { dataUserChat, setDataUserChat, setConversationActive,initConversationActive } = useContext(ChatContext);
+  const { dataUserChat, setDataUserChat, setConversationActive,initConversationActive, initDataUser } = useContext(ChatContext);
   const [nickNameUser, setNickNameUser] = useState(dataUserChat.nickname);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(dataUserChat.avatar);
   const [hideAvatares, setHideAvatares] = useState(dataUserChat.nickname ? true : false);
@@ -25,6 +25,10 @@ const DataMainUser = () => {
   },[]);
 
   useEffect(() => {
+    if(!dataUserChat._id){
+      //setDataUserChat(initDataUser);
+      //console.log('dataUserChat:',dataUserChat);
+    }
   },[dataUserChat]);
 
   const fetchDataUserChat = async() => {

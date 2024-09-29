@@ -17,6 +17,7 @@ export const createParticipant = async (dataParticipant) => {
 
 export const getParticipantByNickname = async (nickname) => {
   try {
+    if(!nickname||nickname==='') return {error: 'nickname is required'};
     const response = await axios.get(
       `${hostURL}/api/participant/byNickname/${nickname}`
     );
@@ -54,6 +55,9 @@ export const getParticipants = async () => {
 
 export const updateParticipant = async (idParticipant, dataParticipant) => {
   try {
+    if (!idParticipant || idParticipant === "") {
+      return { error: "idParticipant is required" };
+    }
     const response = await axios.patch(
       `${hostURL}/api/participant/${idParticipant}`,
       dataParticipant
@@ -138,6 +142,7 @@ export const deleteConversation = async (idConversation) => {
 export const getConversationsByParticipantId = async (participantId) => {
   try {
     console.log('getConversationsByParticipantId:..',participantId);
+    if(!participantId||participantId==='') return {error: 'participantId is required'};
     const response = await axios.get(
       `${hostURL}/api/conversation/byParticipantId/${participantId}`
     );
