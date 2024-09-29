@@ -59,7 +59,7 @@ const ChatWebSocket = () => {
     chatSocket.emit("join", JSON.stringify(dataJoin));
 
     chatSocket.on("joined", (data: []) => {
-      //console.log("newParticipants", data);
+      console.log("newParticipants", data);
       const tempUsersOnline = data.map((user: {nickname:string}) => user.nickname);
       setUsersOnline([...tempUsersOnline]);
       //setMyParticipants([...data]);
