@@ -18,10 +18,12 @@ const ChatLayout = () => {
   useEffect(() => {
     //console.log(dataUserChat);
   }, [conversationActive]);
-  useEffect(() => {}, [dataUserChat]);
+  useEffect(() => {
+    console.log('dataUserChat:',dataUserChat);
+  }, [dataUserChat]);
   return (
     <>
-      {dataUserChat._id !== "" ? (
+      {dataUserChat._id === "" ? (
         <p>No User</p>
       ) : (
         <Box
