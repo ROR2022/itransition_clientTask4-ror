@@ -13,7 +13,7 @@ const BadgeParticipant = ({ participant }: { participant: IParticipant }) => {
   const { usersOnline } = useContext(ChatContext);
   const [statusParticipant, setStatusParticipant] = useState(false);
   useEffect(() => {
-    //console.log("Users Online:", usersOnline);
+    console.log("Users Online:", usersOnline);
     //changeStatusParticipants();
     if(usersOnline.includes(participant.nickname)){
       setStatusParticipant(true);
