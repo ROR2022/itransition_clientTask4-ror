@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getParticipants, createConversation, getgetParticipantByNickname } from "@/api/apiChat";
+import { getParticipants, createConversation, getParticipantByNickname } from "@/api/apiChat";
 import { dataAvatares } from "@/dataEnv/dataEnv";
 import Image from "next/image";
 import { IConversation, IParticipant } from "./MyConversations";
@@ -19,7 +19,7 @@ const BadgeParticipant = ({ participant }: { participant: IParticipant }) => {
   }, []);
   const fetchDataParticipant = async () => {
     try {
-      const res = await getgetParticipantByNickname(participant.nickname);
+      const res = await getParticipantByNickname(participant.nickname);
       console.log("Participant:", res);
       if(usersOnline.includes(res.nickname)||res.online===true){
         setStatusParticipant(true);
