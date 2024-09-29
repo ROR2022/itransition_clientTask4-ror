@@ -51,12 +51,7 @@ const ChatWebSocket = () => {
         fetchConversations();
     });
 
-    const dataJoin = {
-      conversationId: conversationActive._id,
-      nickname: dataUserChat.nickname,
-    };
-
-    chatSocket.emit("join", JSON.stringify(dataJoin));
+    
 
     chatSocket.on("joined", (data: []) => {
       console.log("newParticipants", data);
@@ -105,6 +100,19 @@ const ChatWebSocket = () => {
       handleMakingVideoCall();
     }
   }, [isMakingVideoCall]);
+
+  useEffect(() => {
+    if (dataUserChat.nickname !== "") {
+      //fetchConversations();
+      const dataJoin = {
+        conversationId: conversationActive._id || "",
+        nickname: dataUserChat.nickname,
+      };
+  
+      //chatSocket.emit("join", JSON.stringify(dataJoin));
+      chatSocket?.emit('join', JSON.stringify(dataJoin));
+    }
+  },[dataUserChat]);
 
   
 
