@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getParticipants, createConversation } from "@/api/apiChat";
+import { getParticipants, createConversation, getgetParticipantByNickname } from "@/api/apiChat";
 import { dataAvatares } from "@/dataEnv/dataEnv";
 import Image from "next/image";
 import { IConversation, IParticipant } from "./MyConversations";
@@ -12,6 +12,24 @@ import { ChatContext } from "./context/ChatContext";
 const BadgeParticipant = ({ participant }: { participant: IParticipant }) => {
   const { usersOnline } = useContext(ChatContext);
   const [statusParticipant, setStatusParticipant] = useState(false);
+  useEffect(() => {
+    if(participant.nickname!==''){
+      fetchDataParticipant();
+    }
+  }, []);
+  const fetchDataParticipant = async () => {
+    try {
+      const res = await getgetParticipantByNickname(participant.nickname);
+      console.log("Participant:", res);
+      if(usersOnline.includes(res.nickname)||res.online===true){
+        setStatusParticipant(true);
+      }else{
+        setStatusParticipant(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     console.log("Users Online:", usersOnline);
     //changeStatusParticipants();
