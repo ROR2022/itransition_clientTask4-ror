@@ -120,7 +120,16 @@ const DataMainUser = () => {
     >
       
         <ChatWebSocket/>
-      
+      {isSavedChanges && (
+        <Typography
+          color="success"
+          variant="h6"
+          gutterBottom
+          sx={{ textAlign: "center", display: "none" }}
+        >
+          Saved Changes
+        </Typography>
+      )}
       <Box
       sx={{
         display: 'flex',
